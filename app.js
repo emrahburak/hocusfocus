@@ -33,7 +33,7 @@ var stats = fs.statSync(absoloutePath);
 
 
 // const filePath = path.join(__dirname,`${options.path}`);
-stats.isFile() ? sound.play(absoloutePath).then(res => console.log('DONE!')) : console.log("opps")
+stats.isFile() && sound.play(absoloutePath).then(res => console.log('DONE!')) 
 
 
 
