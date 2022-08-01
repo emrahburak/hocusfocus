@@ -1,9 +1,9 @@
 const sound = require("sound-play");
 const commander = require("commander");
+const Print = require("one-line-print");
 
 const path = require("path");
 const fs = require("fs");
-const { time } = require("console");
 
 const audioPath = "./audio/audio.mp3";
 const defaultDuration = 5000;
@@ -23,32 +23,47 @@ const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration;
 
 // chek some rules
-// const flag = (options.flag ? 'Flag is present.' : 'Flag is not present.');
 
-// const filePath = path.join(__dirname,`${options.path}`);
+async function setLog (countNumb) {
+  let n = countNumb / 1000;
+  Print.newLine("Pomodoro");
+  let counter = await setInterval(() => {
 
-let run = (file) => {
+    //one line Print
+    Print.line(`${n}`);
+
+    n = n - 1;
+    if (n <= 0) {
+      clearInterval(counter);
+      return true;
+
+    }
+  }, 1000);
+}
+
+function run(file) {
   let myFile = path.resolve(file);
   var stats = fs.statSync(myFile).isFile();
   try {
     if (stats) {
-      return sound.play(myFile).then(() => console.log("Done"));
+      setLog(duration).then(res => res && sound.play(myFile));
     }
   } catch (error) {
     return new Error("Can't open file. Path is not correct");
   }
-};
+}
 
-let timer = () => {
-  let n = duration / 1000;
-  while (n >= 0) {
-    setInterval(() => {
-      console.log(n);
-    }, 1000);
-    n = n - 1;
-  }
-};
+run(absoloutePath);
 
-timer();
+// var ProgressBar = require('progress');
 
-// run(absoloutePath)
+// var bar = new ProgressBar('on focus [:bar]: :percent', { total: 10 });
+
+// var timer = setInterval(function () {
+//   bar.width = 80;
+//   bar.tick(-1);
+//   if (bar.complete) {
+//     console.log('\ncomplete\n');
+//     clearInterval(timer);
+//   }
+// }, 1000);
