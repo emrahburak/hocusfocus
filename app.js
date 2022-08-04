@@ -13,20 +13,24 @@ commander
   .version("1.0.0", "-v, --version")
   .usage("[OPTIONS]...")
   //   .option('-f, --flag', 'Detects if the flag is present.')
-  .option("-d, --duration <value>", "set time interval", defaultDuration)
+  .option("-d, --duration <value>", "set time interval")
   .option("-p, --path <value>", "Overwriting value.")
   .parse(process.argv);
 
 const options = commander.opts();
 
 const absoloutePath = options.path ? options.path : audioPath;
-const duration = options.duration;
+const duration = options.duration ? options.duration : defaultDuration;
 
 // chek some rules
+
+
+let minutes = Math.floor(duration % (1000 * 60 * 60) / (1000 * 60));
 
 async function setLog (countNumb) {
   let n = countNumb / 1000;
   Print.newLine("Pomodoro");
+  Print.newLine(`${minutes}`);
   let counter = await setInterval(() => {
 
     //one line Print
