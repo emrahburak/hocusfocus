@@ -4,9 +4,10 @@ const Print = require("one-line-print");
 
 const path = require("path");
 const fs = require("fs");
+const { resolve } = require("path");
 
 const audioPath = "./audio/audio.mp3";
-const defaultDuration = 5000;
+const defaultDuration = 5;
 
 // basic plain
 commander
@@ -19,29 +20,34 @@ commander
 
 const options = commander.opts();
 
-const absoloutePath = options.path ? options.path : audioPath;
-const duration = options.duration ? options.duration : defaultDuration;
-
 // chek some rules
 
+const absoloutePath = options.path ? options.path : audioPath;
+const duration = options.duration ? options.duration : defaultDuration;
+console.log(duration);
 
-let minutes = Math.floor(duration % (1000 * 60 * 60) / (1000 * 60));
+// convert seconds to time format
 
-async function setLog (countNumb) {
-  let n = countNumb / 1000;
+const toTime = (secs) => {
+  const sign = secs < 0;
+  const hhmmss = new Date(Math.abs(secs) * 1000).toISOString().substr(11, 8);
+  return sign ? '-' + hhmmss: hhmmss;
+};
+
+// counter
+
+function setLog(countNumb) {
+  let n = countNumb;
   Print.newLine("Pomodoro");
-  Print.newLine(`${minutes}`);
-  let counter = await setInterval(() => {
-
+  let counter = setInterval(() => {
     //one line Print
-    Print.line(`${n}`);
+    let result = toTime(n);
 
-    n = n - 1;
-    if (n <= 0) {
+    if (result === false) {
       clearInterval(counter);
-      return true;
-
     }
+    Print.line(`${result}`);
+    n = n - 1;
   }, 1000);
 }
 
@@ -50,24 +56,38 @@ function run(file) {
   var stats = fs.statSync(myFile).isFile();
   try {
     if (stats) {
-      setLog(duration).then(res => res && sound.play(myFile));
+      // setLog(duration).then((res) => res && console.log("Done"));
     }
   } catch (error) {
     return new Error("Can't open file. Path is not correct");
   }
 }
 
-run(absoloutePath);
+const myRun = (file, time_s) => {
+  return new Promise((resolve, reject) => {
+    let myFile = path.resolve(file);
+    var stats = fs.statSync(myFile).isFile();
+    if (stats) {
+      Print.newLine("Pomodoro");
+      let n = time_s;
+      let counter = setInterval(() => {
+        let getTime = toTime(n);
+        Print.line(`${getTime}`);
+        n = n - 1;
+        if (n < 0) {
+          clearInterval(counter)
+          resolve(myFile)
+        }
+      },1000);
+    } else {
+      let result = new Error("Cant open file. Path is not corret");
+      reject(result);
+    }
+  });
+};
 
-// var ProgressBar = require('progress');
+myRun(absoloutePath, duration)
+.then(res => console.log(res))
+  .catch((err) => console.log(err.message));
 
-// var bar = new ProgressBar('on focus [:bar]: :percent', { total: 10 });
-
-// var timer = setInterval(function () {
-//   bar.width = 80;
-//   bar.tick(-1);
-//   if (bar.complete) {
-//     console.log('\ncomplete\n');
-//     clearInterval(timer);
-//   }
-// }, 1000);
+// run(absoloutePath);
