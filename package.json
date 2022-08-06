@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^7.2.0",
+    "one-line-print": "^1.0.0",
     "sound-play": "^1.1.0"
   }
 }

@@ -1,17 +1,69 @@
+const sound = require("sound-play");
+const commander = require("commander");
+const Print = require("one-line-print");
 
-const sound = require('sound-play');
-const path = require('path')
+const path = require("path");
+const fs = require("fs");
 
-const args = process.argv[process.argv.length -1]
+const audioPath = "./audio/audio.mp3";
+const defaultDuration = 5000;
 
-const filePath = path.join(__dirname,`${args}`);
+// basic plain
+commander
+  .version("1.0.0", "-v, --version")
+  .usage("[OPTIONS]...")
+  //   .option('-f, --flag', 'Detects if the flag is present.')
+  .option("-d, --duration <value>", "set time interval", defaultDuration)
+  .option("-p, --path <value>", "Overwriting value.")
+  .parse(process.argv);
 
-sound.play(filePath).then(res => console.log('DONE!'));
+const options = commander.opts();
 
+const absoloutePath = options.path ? options.path : audioPath;
+const duration = options.duration;
 
-// console.log(process.argv[process.argv.length -1]);
+// chek some rules
 
+async function setLog (countNumb) {
+  let n = countNumb / 1000;
+  Print.newLine("Pomodoro");
+  let counter = await setInterval(() => {
 
+    //one line Print
+    Print.line(`${n}`);
 
+    n = n - 1;
+    if (n <= 0) {
+      clearInterval(counter);
+      return true;
 
+    }
+  }, 1000);
+}
 
+function run(file) {
+  let myFile = path.resolve(file);
+  var stats = fs.statSync(myFile).isFile();
+  try {
+    if (stats) {
+      setLog(duration).then(res => res && sound.play(myFile));
+    }
+  } catch (error) {
+    return new Error("Can't open file. Path is not correct");
+  }
+}
+
+run(absoloutePath);
+
+// var ProgressBar = require('progress');
+
+// var bar = new ProgressBar('on focus [:bar]: :percent', { total: 10 });
+
+// var timer = setInterval(function () {
+//   bar.width = 80;
+//   bar.tick(-1);
+//   if (bar.complete) {
+//     console.log('\ncomplete\n');
+//     clearInterval(timer);
+//   }
+// }, 1000);
