@@ -7,7 +7,7 @@ const fs = require("fs");
 const { resolve } = require("path");
 
 const audioPath = "./audio/audio.mp3";
-const defaultDuration = 5;
+const defaultDuration = 1500;
 
 // basic plain
 commander
@@ -24,7 +24,7 @@ const options = commander.opts();
 
 const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration ? options.duration : defaultDuration;
-console.log(duration);
+// console.log(duration);
 
 // convert seconds to time format
 
@@ -34,34 +34,7 @@ const toTime = (secs) => {
   return sign ? '-' + hhmmss: hhmmss;
 };
 
-// counter
 
-function setLog(countNumb) {
-  let n = countNumb;
-  Print.newLine("Pomodoro");
-  let counter = setInterval(() => {
-    //one line Print
-    let result = toTime(n);
-
-    if (result === false) {
-      clearInterval(counter);
-    }
-    Print.line(`${result}`);
-    n = n - 1;
-  }, 1000);
-}
-
-function run(file) {
-  let myFile = path.resolve(file);
-  var stats = fs.statSync(myFile).isFile();
-  try {
-    if (stats) {
-      // setLog(duration).then((res) => res && console.log("Done"));
-    }
-  } catch (error) {
-    return new Error("Can't open file. Path is not correct");
-  }
-}
 
 const myRun = (file, time_s) => {
   return new Promise((resolve, reject) => {
@@ -75,8 +48,8 @@ const myRun = (file, time_s) => {
         Print.line(`${getTime}`);
         n = n - 1;
         if (n < 0) {
-          clearInterval(counter)
           resolve(myFile)
+          clearInterval(counter)
         }
       },1000);
     } else {
@@ -86,8 +59,11 @@ const myRun = (file, time_s) => {
   });
 };
 
+
+
 myRun(absoloutePath, duration)
-.then(res => console.log(res))
+.then(res => sound.play(res))
+.then(()=> Print.newLine('Done'))
   .catch((err) => console.log(err.message));
 
 // run(absoloutePath);
