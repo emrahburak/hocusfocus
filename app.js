@@ -43,6 +43,12 @@ const iteration = (iteretor, val) => {
   return iteretor(val).next().value;
 };
 
+const result = function(){
+  return false;
+};
+
+console.log(result());
+
 const counter = function* (n) {
   let timer = yield setInterval(() => {
     let getTime = iteration(toTime, n);
@@ -51,7 +57,6 @@ const counter = function* (n) {
     n = n - 1;
     if (n < 0) {
       clearInterval(counter);
-      return;
 
     }
   }, 1000);
