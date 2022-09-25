@@ -143,3 +143,6 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
+# TS -incremental file
+tsconfig.tsbuildinfo
+node_modules
