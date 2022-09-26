@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
