@@ -74,9 +74,9 @@ const run = (file, time_s) => {
         }
     });
 };
-run(absoloutePath, duration)
-    .then((res) => sound.play(res))
-    .then(() => Print.newLine("Done"))
-    .catch((err) => console.log(err.message));
+// run(absoloutePath, duration)
+//   .then((res) => sound.play(res))
+//   .then(() => Print.newLine("Done"))
+//   .catch((err:PromiseLike<any>) => console.log(err));
 // run(absoloutePath);
 console.log("DEVELOPMENT");
