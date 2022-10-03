@@ -1,7 +1,7 @@
-"use strict";
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
+const keypress = require('keypress');
 const path = require("path");
 const fs = require("fs");
 const audioPath = "./audio/audio.mp3";
@@ -43,14 +43,17 @@ const dump = () => {
         fn(arg);
     }
 };
+let isPaused = false;
 // counter and timer
 const counter = function (n_duration, callback) {
     let countdownTimer = setInterval(() => {
-        let getTime = iteration(toTime, n_duration);
-        Print.line(`${getTime}`);
-        n_duration--;
-        if (n_duration < 0) {
-            return [clearInterval(countdownTimer), callback()];
+        if (!isPaused) {
+            let getTime = iteration(toTime, n_duration);
+            Print.line(`${getTime}`);
+            n_duration--;
+            if (n_duration < 0) {
+                return [clearInterval(countdownTimer), callback()];
+            }
         }
     }, 1000);
 };
@@ -74,9 +77,24 @@ const run = (file, time_s) => {
         }
     });
 };
-// run(absoloutePath, duration)
-//   .then((res) => sound.play(res))
-//   .then(() => Print.newLine("Done"))
-//   .catch((err:PromiseLike<any>) => console.log(err));
-// run(absoloutePath);
-console.log("DEVELOPMENT");
+//runtime
+keypress(process.stdin);
+process.stdin.setRawMode(true);
+process.stdin.on('keypress', function (ch, key) {
+    if (key) {
+        if (key.ctrl && key.name === 'c') {
+            Print.newLine("quitting...");
+            process.exit();
+        }
+        if (key.name === 'space') {
+            isPaused = !isPaused;
+            isPaused && console.log("\t ---paused---\n");
+        }
+    }
+});
+run(absoloutePath, duration)
+    .then((res) => sound.play(res))
+    .then(() => Print.newLine("Done"))
+    .then(null, err => console.log(err.message));
+// .catch((err) => console.log(err.message));
+// console.log("DEVELOPMENT");
