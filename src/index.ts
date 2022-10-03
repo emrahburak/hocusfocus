@@ -1,6 +1,7 @@
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
+const keypress = require('keypress')
 
 const path = require("path");
 const fs = require("fs");
@@ -47,16 +48,14 @@ const iteration = (iteretor: IGenerator, val: any) => {
 
 // function provider
 
-
-
 const queue: any[] = [];
 
 interface ILoadable {
-  (fn:Function,arg:String): number;
+  (fn: Function, arg: String): number;
 }
 // load function to function provider
-const load: ILoadable = (fn:Function,arg:String): number => {
-  return queue.push([fn,arg]);
+const load: ILoadable = (fn: Function, arg: String): number => {
+  return queue.push([fn, arg]);
 };
 
 // dump and run  functions  from function provider
@@ -67,28 +66,32 @@ const dump: Function = () => {
   }
 };
 
+let isPaused: Boolean = false;
+
 interface ICounter {
-    (duration:number,callback:Function):any
+  (duration: number, callback: Function): any;
 }
 // counter and timer
-const counter:ICounter = function (n_duration: number, callback: Function) {
-  let countdownTimer:any = setInterval(() => {
-    let getTime = iteration(toTime, n_duration);
-    Print.line(`${getTime}`);
-    n_duration--;
-    if (n_duration < 0) {
-      return [clearInterval(countdownTimer),callback()];
+const counter: ICounter = function (n_duration: number, callback: Function) {
+  let countdownTimer: any = setInterval(() => {
+    if (!isPaused) {
+      let getTime = iteration(toTime, n_duration);
+      Print.line(`${getTime}`);
+      n_duration--;
+      if (n_duration < 0) {
+        return [clearInterval(countdownTimer), callback()];
+      }
     }
   }, 1000);
 };
 
 interface IRunable {
-    (file:string,time:number):PromiseLike<any>
+  (file: string, time: number): PromiseLike<any>;
 }
 
 // action run
-const run:IRunable = (file: string, time_s: number) => {
-  return new Promise((resolve:Function, reject:Function) => {
+const run: IRunable = (file: string, time_s: number) => {
+  return new Promise((resolve, reject) => {
     // check path & file
     let myFile: string = path.resolve(file);
     var stats: boolean = fs.statSync(myFile).isFile();
@@ -98,22 +101,43 @@ const run:IRunable = (file: string, time_s: number) => {
 
       //before countdown result payload
       // load(testCallback, "testCallback");
-      load( resolve, myFile );
+      load(resolve, myFile);
 
       // start countdown
       counter(time_s, dump);
     } else {
-      let result: Error = new Error("Cant open file. Path is not corret");
+      let result = new Error("Cant open file. Path is not corret");
       reject(result);
     }
   });
 };
 
-// run(absoloutePath, duration)
-//   .then((res) => sound.play(res))
-//   .then(() => Print.newLine("Done"))
-//   .catch((err:PromiseLike<any>) => console.log(err));
 
-// run(absoloutePath);
+//runtime
+keypress(process.stdin)
+process.stdin.setRawMode(true);
 
-console.log("DEVELOPMENT");
+process.stdin.on('keypress',function(ch,key){
+  if(key){
+    if(key.ctrl && key.name === 'c'){
+      Print.newLine("quitting...");
+      process.exit();
+    }
+    if(key.name === 'space'){
+      isPaused = !isPaused;
+      isPaused && console.log("\t ---paused---\n");
+    }
+  }
+});
+
+
+
+
+run(absoloutePath, duration)
+  .then((res) => sound.play(res))
+  .then(() => Print.newLine("Done"))
+  .then(null,err => console.log(err.message))
+  // .catch((err) => console.log(err.message));
+
+
+// console.log("DEVELOPMENT");
