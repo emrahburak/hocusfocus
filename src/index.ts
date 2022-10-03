@@ -1,11 +1,14 @@
+import { toTime, load, dump, iteration } from "./utils/index";
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
-const keypress = require('keypress')
+const keypress = require("keypress");
 
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 
+import * as utils from "./utils";
 const audioPath = "./audio/audio.mp3";
 const defaultDuration = 1500;
 
@@ -25,47 +28,6 @@ const absoloutePath = options.path ? options.path : audioPath;
 const duration: number = options.duration ? options.duration : defaultDuration;
 // console.log(duration);
 
-// utils
-
-// function type
-interface IGenerator {
-  (secs: any): IterableIterator<string>;
-}
-// convert seconds to time format
-const toTime: IGenerator = function* (secs: any): IterableIterator<string> {
-  yield new Date(Math.abs(secs) * 1000).toISOString().substr(11, 8);
-};
-
-//only generator functions
-const iteration = (iteretor: IGenerator, val: any) => {
-  return iteretor(val).next().value;
-};
-
-//for test
-// const testCallback = function (value) {
-//   console.log("this is", value);
-// };
-
-// function provider
-
-const queue: any[] = [];
-
-interface ILoadable {
-  (fn: Function, arg: String): number;
-}
-// load function to function provider
-const load: ILoadable = (fn: Function, arg: String): number => {
-  return queue.push([fn, arg]);
-};
-
-// dump and run  functions  from function provider
-const dump: Function = () => {
-  while (queue.length) {
-    let [fn, arg] = queue.shift();
-    fn(arg);
-  }
-};
-
 let isPaused: Boolean = false;
 
 interface ICounter {
@@ -75,7 +37,7 @@ interface ICounter {
 const counter: ICounter = function (n_duration: number, callback: Function) {
   let countdownTimer: any = setInterval(() => {
     if (!isPaused) {
-      let getTime = iteration(toTime, n_duration);
+      let getTime = utils.iteration(toTime, n_duration);
       Print.line(`${getTime}`);
       n_duration--;
       if (n_duration < 0) {
@@ -101,10 +63,10 @@ const run: IRunable = (file: string, time_s: number) => {
 
       //before countdown result payload
       // load(testCallback, "testCallback");
-      load(resolve, myFile);
+      utils.load(resolve, myFile);
 
       // start countdown
-      counter(time_s, dump);
+      counter(time_s, utils.dump);
     } else {
       let result = new Error("Cant open file. Path is not corret");
       reject(result);
@@ -112,32 +74,30 @@ const run: IRunable = (file: string, time_s: number) => {
   });
 };
 
-
 //runtime
-keypress(process.stdin)
-process.stdin.setRawMode(true);
+keypress(process.stdin);
+// process.stdin.setRawMode(true);
 
-process.stdin.on('keypress',function(ch,key){
-  if(key){
-    if(key.ctrl && key.name === 'c'){
+process.stdin.on("keypress", function (ch, key) {
+  if (key) {
+    if (key.ctrl && key.name === "c") {
       Print.newLine("quitting...");
       process.exit();
     }
-    if(key.name === 'space'){
+    if (key.name === "space") {
       isPaused = !isPaused;
       isPaused && console.log("\t ---paused---\n");
     }
   }
 });
 
+console.log(os.platform());
 
+// run(absoloutePath, duration)
+//   .then((res) => sound.play(res))
+//   .then(() => Print.newLine("Done"))
+//   .then(null,err => console.log(err.message))
 
+// .catch((err) => console.log(err.message));
 
-run(absoloutePath, duration)
-  .then((res) => sound.play(res))
-  .then(() => Print.newLine("Done"))
-  .then(null,err => console.log(err.message))
-  // .catch((err) => console.log(err.message));
-
-
-// console.log("DEVELOPMENT");
+console.log("DEVELOPMENT");
