@@ -3,6 +3,7 @@
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
+const keypress = require("keypress");
 
 const path = require("path");
 const fs = require("fs");
@@ -21,12 +22,10 @@ commander
 
 const options = commander.opts();
 
-
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration ? options.duration : defaultDuration;
 // console.log(duration);
-
 
 // utils
 // convert seconds to time format
@@ -39,22 +38,18 @@ const iteration = (iteretor, val, fn) => {
   return iteretor(val, fn).next().value;
 };
 
-
 //for test
 // const testCallback = function (value) {
 //   console.log("this is", value);
 // };
 
-
 // function provider
 const queue = [];
-
 
 // load function to function provider
 const load = (fn, arg) => {
   queue.push([fn, arg]);
 };
-
 
 // dump and run  functions  from function provider
 const dump = () => {
@@ -64,20 +59,22 @@ const dump = () => {
   }
 };
 
+let isPaused = false;
 
 // counter and timer
 const counter = function (n_duration, callback) {
   let countdownTimer = setInterval(() => {
-    let getTime = iteration(toTime, n_duration);
-    Print.line(`${getTime}`);
-    n_duration--;
-    if (n_duration < 0) {
-      clearInterval(countdownTimer);
-      callback();
+    if (!isPaused) {
+      let getTime = iteration(toTime, n_duration);
+      Print.line(`${getTime}`);
+      n_duration--;
+      if (n_duration < 0) {
+        clearInterval(countdownTimer);
+        callback();
+      }
     }
   }, 1000);
 };
-
 
 // action run
 const run = (file, time_s) => {
@@ -95,12 +92,27 @@ const run = (file, time_s) => {
 
       // start countdown
       counter(time_s, dump);
-      } else {
+    } else {
       let result = new Error("Cant open file. Path is not corret");
       reject(result);
     }
   });
 };
+
+keypress(process.stdin);
+process.stdin.setRawMode(true);
+
+process.stdin.on("keypress", function (ch, key) {
+  if (key) {
+    if (key.ctrl && key.name === "c") {
+      Print.newLine("quitting..."), process.exit();
+    }
+    if(key.name === "space"){
+      isPaused = !isPaused;
+      isPaused && console.log("\t--paused--\n");
+    }
+  }
+});
 
 run(absoloutePath, duration)
   .then((res) => sound.play(res))
