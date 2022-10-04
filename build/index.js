@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./utils/index");
+// import { toTime, load, dump, iteration } from "./utils/index";
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
@@ -31,9 +31,10 @@ const keypress = require("keypress");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const spawn = require('child_process').spawn;
 const utils = __importStar(require("./utils"));
 const audioPath = "./audio/audio.mp3";
-const defaultDuration = 1500;
+const defaultDuration = 5;
 // basic plain
 commander
     .version("1.0.0", "-v, --version")
@@ -43,16 +44,18 @@ commander
     .option("-p, --path <value>", "Overwriting value.")
     .parse(process.argv);
 const options = commander.opts();
+const myResult = utils.pipe(utils.flagPathValidator, utils.flagDurationValidator);
+const result = myResult(commander.opts());
+console.log(result);
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration ? options.duration : defaultDuration;
-// console.log(duration);
 let isPaused = false;
 // counter and timer
 const counter = function (n_duration, callback) {
     let countdownTimer = setInterval(() => {
         if (!isPaused) {
-            let getTime = utils.iteration(index_1.toTime, n_duration);
+            let getTime = utils.iteration(utils.toTime, n_duration);
             Print.line(`${getTime}`);
             n_duration--;
             if (n_duration < 0) {

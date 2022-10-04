@@ -1,4 +1,4 @@
-import { toTime, load, dump, iteration } from "./utils/index";
+// import { toTime, load, dump, iteration } from "./utils/index";
 const sound = require("sound-play");
 const commander = require("commander");
 const Print = require("one-line-print");
@@ -7,10 +7,11 @@ const keypress = require("keypress");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const spawn = require('child_process').spawn;
 
 import * as utils from "./utils";
 const audioPath = "./audio/audio.mp3";
-const defaultDuration = 1500;
+const defaultDuration = 5;
 
 // basic plain
 commander
@@ -23,10 +24,21 @@ commander
 
 const options = commander.opts();
 
+const myResult:any = utils.pipe(
+  utils.flagPathValidator,
+  utils.flagDurationValidator,
+)
+
+const result = myResult(commander.opts());
+
+console.log(result)
+
+
+
+
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration: number = options.duration ? options.duration : defaultDuration;
-// console.log(duration);
 
 let isPaused: Boolean = false;
 
@@ -37,7 +49,7 @@ interface ICounter {
 const counter: ICounter = function (n_duration: number, callback: Function) {
   let countdownTimer: any = setInterval(() => {
     if (!isPaused) {
-      let getTime = utils.iteration(toTime, n_duration);
+      let getTime = utils.iteration(utils.toTime, n_duration);
       Print.line(`${getTime}`);
       n_duration--;
       if (n_duration < 0) {
