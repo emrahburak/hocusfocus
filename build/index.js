@@ -25,9 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { toTime, load, dump, iteration } from "./utils/index";
 const sound = require("sound-play");
-const commander = require("commander");
+const { Command } = require("commander");
 const Print = require("one-line-print");
 const keypress = require("keypress");
+const R = require('ramda');
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
@@ -35,18 +36,35 @@ const spawn = require('child_process').spawn;
 const utils = __importStar(require("./utils"));
 const audioPath = "./audio/audio.mp3";
 const defaultDuration = 5;
+const program = new Command();
 // basic plain
-commander
+program
     .version("1.0.0", "-v, --version")
     .usage("[OPTIONS]...")
     //   .option('-f, --flag', 'Detects if the flag is present.')
-    .option("-d, --duration <value>", "set time interval")
-    .option("-p, --path <value>", "Overwriting value.")
-    .parse(process.argv);
-const options = commander.opts();
-const myResult = utils.pipe(utils.flagPathValidator, utils.flagDurationValidator);
-const result = myResult(commander.opts());
-console.log(result);
+    .option("-d, --duration <value>", "set time interval", 5)
+    .option("-p, --path <value>", "Overwriting value.", "path/subPath");
+program.parse(process.argv);
+const options = program.opts();
+// console.log(options.duration);
+// console.log(options.path)
+const pathParser = (obj) => { let path = obj.path ? obj.path : null; return Object.assign(Object.assign({}, obj), { path }); };
+const durationParser = (obj) => { let duration = obj.duration ? obj.duration : null; return Object.assign(Object.assign({}, obj), { duration }); };
+let pt = utils.pipe(options, pathParser, durationParser);
+console.log(pt);
+// pathParser(options);
+// durationParser(options);
+// console.log(ptResult)
+// const pathResult:any = utils.pipe(
+//   options,
+//   utils.flagPathValidator,
+// )
+// const durationResult:any = utils.pipe(
+//   options,
+//   utils.flagDurationValidator,
+// )
+// console.log('Path Result: ',pathResult)
+// console.log('Duration Result: ',durationResult)
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration ? options.duration : defaultDuration;

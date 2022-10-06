@@ -7,55 +7,49 @@ const spawn = require("child_process").spawn;
 
 // utils
 
-//for test
-// const testCallback = function (value) {
-//   console.log("this is", value);
-// };
+//   VALIDATION
 
-// composeItems
-export const pipe: Function =
-  (...fns) =>
-  (x) =>
-    fns.reduce((y, fn) => fn(y), x);
+interface Reducer {
+  (obj:object,...fns:Function[]):object
+}
 
-// test function
+export const pipe:Reducer = (x0, ...fns) => fns.reduce((x, f) => f(x), x0);
+
 
 interface ITrace {
-  (label: any);
+  (label: any):any;
 }
 
-export const trace: Function = (label) => (value) => {
-  console.log(`${{...value}}`)
-  return {...value}
-
+export const trace: ITrace = (label) => (value) => {
+  console.log(
+    `${label}: ${{...value}}`
+  );
+  return {...value};
 };
-
-const dataProvider: Function = (data: any, name: string) => (value) => {
-  value[name] = data;
-  return { ...value };
-};
-
-const isNothing = (value: any) => {
-  if(value !== null || value != undefined) {
-    return value
-  }
-  return null;
-}
 
 
 interface IValidator {
-  (value: any, name: string): object;
+  (obj: any): object;
 }
 
-export const flagPathValidator = (obj) => {
-  let path = obj.path ? obj.path : null
-  return dataProvider(path,'path');
+export const optionValidatorPath: IValidator = (obj) => {
+  let path = obj.path ? obj.path : null;
+  return { ...obj, path };
 };
 
-export const flagDurationValidator = (obj) => {
-    let duration = obj.duration ? obj.duration :null
-    return dataProvider(duration,'duration')
+export const optionValidatorDuration: IValidator = (obj) => {
+  let duration = obj.duration ? obj.duration : null;
+  return { ...obj, duration };
 };
+
+
+export const IsPath = (obj) => {let file = path.resolve(obj.path); }
+
+
+
+
+
+// BUSINESS
 
 // function type
 interface IGenerator {

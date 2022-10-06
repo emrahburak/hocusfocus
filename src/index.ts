@@ -1,8 +1,10 @@
 // import { toTime, load, dump, iteration } from "./utils/index";
 const sound = require("sound-play");
-const commander = require("commander");
+const {Command} = require("commander");
 const Print = require("one-line-print");
 const keypress = require("keypress");
+const R = require('ramda');
+
 
 const path = require("path");
 const fs = require("fs");
@@ -13,25 +15,57 @@ import * as utils from "./utils";
 const audioPath = "./audio/audio.mp3";
 const defaultDuration = 5;
 
+const program = new Command();
 // basic plain
-commander
+program
   .version("1.0.0", "-v, --version")
   .usage("[OPTIONS]...")
   //   .option('-f, --flag', 'Detects if the flag is present.')
-  .option("-d, --duration <value>", "set time interval")
-  .option("-p, --path <value>", "Overwriting value.")
-  .parse(process.argv);
+  .option("-d, --duration <value>", "set time interval",5)
+  .option("-p, --path <value>", "Overwriting value.","path/subPath")
 
-const options = commander.opts();
+program.parse(process.argv);
 
-const myResult:any = utils.pipe(
-  utils.flagPathValidator,
-  utils.flagDurationValidator,
-)
+const options = program.opts();
 
-const result = myResult(commander.opts());
 
-console.log(result)
+// console.log(options.duration);
+// console.log(options.path)
+
+
+
+const pathParser = (obj) => {let path = obj.path ? obj.path : null; return {...obj,path};}
+const durationParser = (obj) => {let duration = obj.duration? obj.duration : null; return {...obj,duration};}
+
+
+
+let pt = utils.pipe(options,pathParser,durationParser)
+console.log(pt);
+
+
+
+
+
+
+
+
+// pathParser(options);
+// durationParser(options);
+// console.log(ptResult)
+
+// const pathResult:any = utils.pipe(
+//   options,
+//   utils.flagPathValidator,
+// )
+
+// const durationResult:any = utils.pipe(
+//   options,
+//   utils.flagDurationValidator,
+// )
+
+
+// console.log('Path Result: ',pathResult)
+// console.log('Duration Result: ',durationResult)
 
 
 

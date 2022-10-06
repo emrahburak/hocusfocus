@@ -1,44 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dump = exports.load = exports.iteration = exports.toTime = exports.flagDurationValidator = exports.flagPathValidator = exports.trace = exports.pipe = void 0;
+exports.dump = exports.load = exports.iteration = exports.toTime = exports.IsPath = exports.optionValidatorDuration = exports.optionValidatorPath = exports.trace = exports.pipe = void 0;
 const sound = require("sound-play");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const spawn = require("child_process").spawn;
-// utils
-//for test
-// const testCallback = function (value) {
-//   console.log("this is", value);
-// };
-// composeItems
-const pipe = (...fns) => (x) => fns.reduce((y, fn) => fn(y), x);
+const pipe = (x0, ...fns) => fns.reduce((x, f) => f(x), x0);
 exports.pipe = pipe;
 const trace = (label) => (value) => {
-    console.log(`${Object.assign({}, value)}`);
+    console.log(`${label}: ${Object.assign({}, value)}`);
     return Object.assign({}, value);
 };
 exports.trace = trace;
-const dataProvider = (data, name) => (value) => {
-    value[name] = data;
-    return Object.assign({}, value);
-};
-const isNothing = (value) => {
-    if (value !== null || value != undefined) {
-        return value;
-    }
-    return null;
-};
-const flagPathValidator = (obj) => {
+const optionValidatorPath = (obj) => {
     let path = obj.path ? obj.path : null;
-    return dataProvider(path, 'path');
+    return Object.assign(Object.assign({}, obj), { path });
 };
-exports.flagPathValidator = flagPathValidator;
-const flagDurationValidator = (obj) => {
+exports.optionValidatorPath = optionValidatorPath;
+const optionValidatorDuration = (obj) => {
     let duration = obj.duration ? obj.duration : null;
-    return dataProvider(duration, 'duration');
+    return Object.assign(Object.assign({}, obj), { duration });
 };
-exports.flagDurationValidator = flagDurationValidator;
+exports.optionValidatorDuration = optionValidatorDuration;
+const IsPath = (obj) => { let file = path.resolve(obj.path); };
+exports.IsPath = IsPath;
 // convert seconds to time format
 const toTime = function* (secs) {
     yield new Date(Math.abs(secs) * 1000).toISOString().substr(11, 8);
