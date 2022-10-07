@@ -7,6 +7,10 @@ const spawn = require("child_process").spawn;
 
 // utils
 
+
+
+
+
 //   VALIDATION
 
 interface Reducer {
@@ -43,45 +47,41 @@ export const optionValidatorDuration: IValidator = (obj) => {
 };
 
 
+
 export const IsPath = (obj) => {let file = path.resolve(obj.path); }
 
 
+var Maybe = function(val:any) {
+  this.__value = val;
+};
 
 
+Maybe["of"] = function(val:any){
+  return new  Maybe(val);
+};
 
-// BUSINESS
 
-// function type
-interface IGenerator {
-  (secs: any): IterableIterator<string>;
+const getProp = function(name:string){
+  return name
 }
-// convert seconds to time format
-export const toTime: IGenerator = function* (
-  secs: any
-): IterableIterator<string> {
-  yield new Date(Math.abs(secs) * 1000).toISOString().substr(11, 8);
-};
 
-//only generator functions
-export const iteration = (iteretor: IGenerator, val: any) => {
-  return iteretor(val).next().value;
-};
-
-// function provider
-const queue: any[] = [];
-
-interface ILoadable {
-  (fn: Function, arg: String): number;
+Maybe.prototype.isNothing = function(fn){
+  return (this.__value === null || fn(this.__value) === undefined);
 }
-// load function to function provider
-export const load: ILoadable = (fn: Function, arg: String): number => {
-  return queue.push([fn, arg]);
-};
 
-// dump and run  functions  from function provider
-export const dump: Function = () => {
-  while (queue.length) {
-    let [fn, arg] = queue.shift();
-    fn(arg);
+
+Maybe.prototype.map = function(fn){
+  if(this.isNothing(fn)){
+    return Maybe["of"](null)
   }
-};
+  return Maybe["of"](fn(this.__value));
+}
+
+function getMyStatus(obj) {
+  return Maybe["of"](obj)
+    .getProp('path')
+    .map()
+
+}
+
+

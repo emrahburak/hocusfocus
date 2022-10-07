@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dump = exports.load = exports.iteration = exports.toTime = exports.IsPath = exports.optionValidatorDuration = exports.optionValidatorPath = exports.trace = exports.pipe = void 0;
+exports.IsPath = exports.optionValidatorDuration = exports.optionValidatorPath = exports.trace = exports.pipe = void 0;
 const sound = require("sound-play");
 const path = require("path");
 const fs = require("fs");
@@ -25,28 +25,26 @@ const optionValidatorDuration = (obj) => {
 exports.optionValidatorDuration = optionValidatorDuration;
 const IsPath = (obj) => { let file = path.resolve(obj.path); };
 exports.IsPath = IsPath;
-// convert seconds to time format
-const toTime = function* (secs) {
-    yield new Date(Math.abs(secs) * 1000).toISOString().substr(11, 8);
+var Maybe = function (val) {
+    this.__value = val;
 };
-exports.toTime = toTime;
-//only generator functions
-const iteration = (iteretor, val) => {
-    return iteretor(val).next().value;
+Maybe["of"] = function (val) {
+    return new Maybe(val);
 };
-exports.iteration = iteration;
-// function provider
-const queue = [];
-// load function to function provider
-const load = (fn, arg) => {
-    return queue.push([fn, arg]);
+const getProp = function (name) {
+    return name;
 };
-exports.load = load;
-// dump and run  functions  from function provider
-const dump = () => {
-    while (queue.length) {
-        let [fn, arg] = queue.shift();
-        fn(arg);
+Maybe.prototype.isNothing = function (fn) {
+    return (this.__value === null || fn(this.__value) === undefined);
+};
+Maybe.prototype.map = function (fn) {
+    if (this.isNothing(fn)) {
+        return Maybe["of"](null);
     }
+    return Maybe["of"](fn(this.__value));
 };
-exports.dump = dump;
+function getMyStatus(obj) {
+    return Maybe["of"](obj)
+        .getProp('path')
+        .map();
+}

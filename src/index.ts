@@ -1,4 +1,7 @@
+import { counter,isPaused } from './utils/counter';
+import {Maybe} from './utils';
 // import { toTime, load, dump, iteration } from "./utils/index";
+import {payload,dump} from './utils/provider';
 const sound = require("sound-play");
 const {Command} = require("commander");
 const Print = require("one-line-print");
@@ -11,7 +14,6 @@ const fs = require("fs");
 const os = require("os");
 const spawn = require('child_process').spawn;
 
-import * as utils from "./utils";
 const audioPath = "./audio/audio.mp3";
 const defaultDuration = 5;
 
@@ -29,69 +31,18 @@ program.parse(process.argv);
 const options = program.opts();
 
 
-// console.log(options.duration);
-// console.log(options.path)
 
+const maybeStatus = Maybe.of(options);
 
-
-const pathParser = (obj) => {let path = obj.path ? obj.path : null; return {...obj,path};}
-const durationParser = (obj) => {let duration = obj.duration? obj.duration : null; return {...obj,duration};}
-
-
-
-let pt = utils.pipe(options,pathParser,durationParser)
-console.log(pt);
-
-
-
-
-
-
-
-
-// pathParser(options);
-// durationParser(options);
-// console.log(ptResult)
-
-// const pathResult:any = utils.pipe(
-//   options,
-//   utils.flagPathValidator,
-// )
-
-// const durationResult:any = utils.pipe(
-//   options,
-//   utils.flagDurationValidator,
-// )
-
-
-// console.log('Path Result: ',pathResult)
-// console.log('Duration Result: ',durationResult)
-
-
-
+console.log(maybeStatus);
 
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration: number = options.duration ? options.duration : defaultDuration;
 
-let isPaused: Boolean = false;
 
-interface ICounter {
-  (duration: number, callback: Function): any;
-}
-// counter and timer
-const counter: ICounter = function (n_duration: number, callback: Function) {
-  let countdownTimer: any = setInterval(() => {
-    if (!isPaused) {
-      let getTime = utils.iteration(utils.toTime, n_duration);
-      Print.line(`${getTime}`);
-      n_duration--;
-      if (n_duration < 0) {
-        return [clearInterval(countdownTimer), callback()];
-      }
-    }
-  }, 1000);
-};
+
+
 
 interface IRunable {
   (file: string, time: number): PromiseLike<any>;
@@ -109,10 +60,10 @@ const run: IRunable = (file: string, time_s: number) => {
 
       //before countdown result payload
       // load(testCallback, "testCallback");
-      utils.load(resolve, myFile);
+      payload(resolve, myFile);
 
       // start countdown
-      counter(time_s, utils.dump);
+      counter(time_s, dump);
     } else {
       let result = new Error("Cant open file. Path is not corret");
       reject(result);
@@ -124,6 +75,7 @@ const run: IRunable = (file: string, time_s: number) => {
 keypress(process.stdin);
 // process.stdin.setRawMode(true);
 
+var spaceCliked = isPaused
 process.stdin.on("keypress", function (ch, key) {
   if (key) {
     if (key.ctrl && key.name === "c") {
@@ -131,7 +83,7 @@ process.stdin.on("keypress", function (ch, key) {
       process.exit();
     }
     if (key.name === "space") {
-      isPaused = !isPaused;
+      spaceCliked = !spaceCliked;
       isPaused && console.log("\t ---paused---\n");
     }
   }
