@@ -1,8 +1,3 @@
-# cliPomodoro
+# hocusfocus
 
-## ToDo
-
---help flag
---duration with regex
-convert hour to seconds (1h => 3600s) 
 
