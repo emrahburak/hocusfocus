@@ -19,6 +19,7 @@ export const iteration = (iteretor: IGenerator, val: any) => {
 
 
 export var isPaused: Boolean = false;
+
 interface ICounter {
   (duration: number, callback: Function): any;
 }

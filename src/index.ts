@@ -1,7 +1,7 @@
-import { counter,isPaused } from './utils/counter';
-import {Maybe} from './utils';
-// import { toTime, load, dump, iteration } from "./utils/index";
-import {payload,dump} from './utils/provider';
+import * as Counter from './lib/counter';
+import * as FunctionQueue from './lib/function-queue';
+import * as Monad from './lib/monad';
+
 const sound = require("sound-play");
 const {Command} = require("commander");
 const Print = require("one-line-print");
@@ -32,9 +32,9 @@ const options = program.opts();
 
 
 
-const maybeStatus = Maybe.of(options);
+// const maybeStatus = Maybe.of(options);
 
-console.log(maybeStatus);
+// console.log(maybeStatus);
 
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
@@ -60,10 +60,10 @@ const run: IRunable = (file: string, time_s: number) => {
 
       //before countdown result payload
       // load(testCallback, "testCallback");
-      payload(resolve, myFile);
+      FunctionQueue.payload(resolve, myFile);
 
       // start countdown
-      counter(time_s, dump);
+      Counter.counter(time_s, FunctionQueue.dump);
     } else {
       let result = new Error("Cant open file. Path is not corret");
       reject(result);
@@ -75,7 +75,7 @@ const run: IRunable = (file: string, time_s: number) => {
 keypress(process.stdin);
 // process.stdin.setRawMode(true);
 
-var spaceCliked = isPaused
+var spaceCliked = Counter.isPaused
 process.stdin.on("keypress", function (ch, key) {
   if (key) {
     if (key.ctrl && key.name === "c") {
@@ -84,7 +84,7 @@ process.stdin.on("keypress", function (ch, key) {
     }
     if (key.name === "space") {
       spaceCliked = !spaceCliked;
-      isPaused && console.log("\t ---paused---\n");
+      Counter.isPaused && console.log("\t ---paused---\n");
     }
   }
 });
