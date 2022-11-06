@@ -1,9 +1,31 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const counter_1 = require("./utils/counter");
-const utils_1 = require("./utils");
-// import { toTime, load, dump, iteration } from "./utils/index";
-const provider_1 = require("./utils/provider");
+const Counter = __importStar(require("./lib/counter"));
+const FQ = __importStar(require("./lib/f-queue"));
+const FU = __importStar(require("./lib/f-utils"));
 const sound = require("sound-play");
 const { Command } = require("commander");
 const Print = require("one-line-print");
@@ -21,12 +43,17 @@ program
     .version("1.0.0", "-v, --version")
     .usage("[OPTIONS]...")
     //   .option('-f, --flag', 'Detects if the flag is present.')
-    .option("-d, --duration <value>", "set time interval", 5)
-    .option("-p, --path <value>", "Overwriting value.", "path/subPath");
+    .option("-d, --duration <value>", "set time interval")
+    .option("-p, --path <value>", "Overwriting value.", "");
 program.parse(process.argv);
 const options = program.opts();
-const maybeStatus = utils_1.Maybe.of(options);
-console.log(maybeStatus);
+// const result = FU.pipe(
+//   options,
+//   Valid.isPath,
+//   Valid.isDuration,
+//   )
+const result = FU.getOption(options);
+console.log(result);
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
 const duration = options.duration ? options.duration : defaultDuration;
@@ -40,9 +67,9 @@ const run = (file, time_s) => {
             Print.newLine("Pomodoro");
             //before countdown result payload
             // load(testCallback, "testCallback");
-            (0, provider_1.payload)(resolve, myFile);
+            FQ.payload(resolve, myFile);
             // start countdown
-            (0, counter_1.counter)(time_s, provider_1.dump);
+            Counter.counter(time_s, FQ.dump);
         }
         else {
             let result = new Error("Cant open file. Path is not corret");
@@ -53,7 +80,7 @@ const run = (file, time_s) => {
 //runtime
 keypress(process.stdin);
 // process.stdin.setRawMode(true);
-var spaceCliked = counter_1.isPaused;
+var spaceCliked = Counter.isPaused;
 process.stdin.on("keypress", function (ch, key) {
     if (key) {
         if (key.ctrl && key.name === "c") {
@@ -62,7 +89,7 @@ process.stdin.on("keypress", function (ch, key) {
         }
         if (key.name === "space") {
             spaceCliked = !spaceCliked;
-            counter_1.isPaused && console.log("\t ---paused---\n");
+            Counter.isPaused && console.log("\t ---paused---\n");
         }
     }
 });

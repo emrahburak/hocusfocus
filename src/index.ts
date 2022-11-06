@@ -1,6 +1,8 @@
 import * as Counter from './lib/counter';
-import * as FunctionQueue from './lib/function-queue';
-import * as Monad from './lib/monad';
+import * as FQ from './lib/f-queue';
+import * as Valid from './lib/validation';
+import * as Test from './lib/trace';
+import * as FU from './lib/f-utils';
 
 const sound = require("sound-play");
 const {Command} = require("commander");
@@ -23,18 +25,28 @@ program
   .version("1.0.0", "-v, --version")
   .usage("[OPTIONS]...")
   //   .option('-f, --flag', 'Detects if the flag is present.')
-  .option("-d, --duration <value>", "set time interval",5)
-  .option("-p, --path <value>", "Overwriting value.","path/subPath")
+  .option("-d, --duration <value>", "set time interval",)
+  .option("-p, --path <value>", "Overwriting value.","")
 
 program.parse(process.argv);
 
 const options = program.opts();
 
 
+// const result = FU.pipe(
+//   options,
+//   Valid.isPath,
+//   Valid.isDuration,
+//   )
 
-// const maybeStatus = Maybe.of(options);
 
-// console.log(maybeStatus);
+const result = FU.getOption(options);
+  
+
+console.log(result);
+
+
+
 
 // chek some rules
 const absoloutePath = options.path ? options.path : audioPath;
@@ -60,10 +72,10 @@ const run: IRunable = (file: string, time_s: number) => {
 
       //before countdown result payload
       // load(testCallback, "testCallback");
-      FunctionQueue.payload(resolve, myFile);
+      FQ.payload(resolve, myFile);
 
       // start countdown
-      Counter.counter(time_s, FunctionQueue.dump);
+      Counter.counter(time_s, FQ.dump);
     } else {
       let result = new Error("Cant open file. Path is not corret");
       reject(result);

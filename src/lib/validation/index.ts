@@ -10,12 +10,12 @@ interface IValidator {
   (obj: any): object;
 }
 
-export const optionValidatorPath: IValidator = (obj) => {
+export const isPath: IValidator = (obj) => {
   let path = obj.path ? obj.path : null;
   return { ...obj, path };
 };
 
-export const optionValidatorDuration: IValidator = (obj) => {
+export const isDuration: IValidator = (obj) => {
   let duration = obj.duration ? obj.duration : null;
   return { ...obj, duration };
 };
