@@ -57,6 +57,7 @@ export function getOption(opt){
     .map(Valid.isPath)
     .map(Valid.isDuration)
     .join();
+
 }
 
 
