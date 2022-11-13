@@ -1,3 +1,4 @@
+import { trace } from './../trace/index';
 
 import * as Valid from '../validation';
 const R = require('ramda');
@@ -16,7 +17,7 @@ interface Reducer {
 export const pipe:Reducer = (x0, ...fns) => fns.reduce((x, f) => f(x), x0);
 
 
-var Maybe = function(val) {
+export const Maybe = function(val) {
   this.__value = val;
 };
 
@@ -44,21 +45,13 @@ Maybe.prototype.join= function(){
 
 Maybe.prototype.orElse = function(argv){
   if(this.isNothing()){
-    return Maybe["of"](argv)
+    return Maybe["of"](argv);
   }
   return this;
 }
 
 
 
-
-export function getOption(opt){
-  return Maybe["of"](opt)
-    .map(Valid.isPath)
-    .map(Valid.isDuration)
-    .join();
-
-}
 
 
 
