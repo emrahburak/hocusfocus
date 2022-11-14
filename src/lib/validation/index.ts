@@ -1,5 +1,8 @@
+import { payload } from './../f-queue/index';
 import { errors } from "../constants";
-import * as FU from '../f-utils';
+import * as FU from "../f-utils";
+
+import * as Cons from "../constants";
 
 const path = require("path");
 const os = require("os");
@@ -13,27 +16,37 @@ interface IValidator {
   (obj: any): object;
 }
 
+// Arguments Null Check
 export const isPath: IValidator = (obj) => {
-  let path = obj.path ? obj.path : undefined;
+  let path = obj.path ? obj.path : -1;
   return { ...obj, path };
 };
 
 export const isDuration: IValidator = (obj) => {
-  let duration = obj.duration ? obj.duration : undefined;
+  let duration = obj.duration ? obj.duration : -1;
   return { ...obj, duration };
 };
 
-
-export const isRealFilePath = (obj) => {
-  let myFile: string = path.resolve(String(obj["path"]));
-  var stats: boolean = fs.statSync(myFile).isFile();
-
-  if (!stats) {
-    return { ...obj, error: errors.OPENFILE };
-  }
-  return obj;
+// File path Check
+export const pathResolver = (obj) => {
+  let result = path.resolve(String(obj["path"]));
+  return { ...obj, path: result };
 };
 
-export const getPlatform: Function = () => {
-  return os.platform;
+export const afterPathResolver = (obj) => {
+  try {
+    let error = fs.statSync(obj["path"]).isFile() ? Cons.errors.OPENFILE : -1;
+  } catch (e) {
+    return { ...obj, ERRORS: [e.message] };
+  }
+  return { ...obj };
+};
+
+// Os Check
+const getPlatform:Function = () => {
+  return os.platform() ? os.platform() : -1;
+}
+
+export const addOsPlatform: Function = (obj) => {
+  return {...obj,platform:getPlatform()}
 };

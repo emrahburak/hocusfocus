@@ -6,6 +6,6 @@ export const trace: ITrace = (label) => (value) => {
   console.log(
     `${label}: ${{...value}}`
   );
-  return {...value};
+  return value;
 };
 

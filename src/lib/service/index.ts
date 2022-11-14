@@ -1,8 +1,8 @@
+import { trace } from './../trace/index';
 import * as FU from "../f-utils";
 import * as Cons from "../constants";
 import * as FQ from "../f-queue";
 import * as Valid from "../validation";
-import * as Test from "../trace";
 
 import * as Counter from "../counter";
 
@@ -16,8 +16,10 @@ export function getArguments(opt) {
 }
 
 export function getPayload(obj){
-    return FU.Maybe["of"](obj["path"])
-        .map(Valid.isRealFilePath)
+    return FU.Maybe["of"](obj)
+      .map(Valid.pathResolver)
+      .map(Valid.afterPathResolver)
+      .map(Valid.addOsPlatform)
     .join()
 }
 
@@ -25,7 +27,8 @@ export function getPayload(obj){
 export const cap = (obj:object) => {
     return FU.pipe(
         obj,
-        getArguments
+        getArguments,
+        getPayload
     )
 }
 

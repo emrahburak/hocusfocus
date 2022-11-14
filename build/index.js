@@ -35,11 +35,12 @@ const program = new Command();
 program
     .version("1.0.0", "-v, --version")
     .usage("[OPTIONS]...")
-    .option("-d, --duration <value>", "set time interval", Cons.initialState.DURATION)
-    .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
+    .option("-d, --duration <value>", "set time interval", Cons.testState.DURATION)
+    .option("-p, --path <value>", "Overwriting value.", Cons.testState.PATH);
 program.parse(process.argv);
 const options = program.opts();
-(0, service_1.cap)(options);
+const result = (0, service_1.cap)(options);
+console.log(result);
 //runtime
 keypress(process.stdin);
 // process.stdin.setRawMode(true);

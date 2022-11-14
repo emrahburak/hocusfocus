@@ -35,13 +35,15 @@ function getArguments(opt) {
 }
 exports.getArguments = getArguments;
 function getPayload(obj) {
-    return FU.Maybe["of"](obj["path"])
-        .map(Valid.isRealFilePath)
+    return FU.Maybe["of"](obj)
+        .map(Valid.pathResolver)
+        .map(Valid.afterPathResolver)
+        .map(Valid.addOsPlatform)
         .join();
 }
 exports.getPayload = getPayload;
 const cap = (obj) => {
-    return FU.pipe(obj, getArguments);
+    return FU.pipe(obj, getArguments, getPayload);
 };
 exports.cap = cap;
 const service = (payload) => {
