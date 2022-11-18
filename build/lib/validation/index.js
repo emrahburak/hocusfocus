@@ -23,21 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addOsPlatform = exports.afterPathResolver = exports.pathResolver = exports.isDuration = exports.isPath = exports.IsPath = void 0;
+exports.addOsPlatform = exports.afterPathResolver = exports.pathResolver = exports.isDuration = exports.isPath = void 0;
 const Cons = __importStar(require("../constants"));
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-const IsPath = (obj) => {
-    let file = path.resolve(obj.path);
-};
-exports.IsPath = IsPath;
 // Arguments Null Check
 const isPath = (obj) => {
     let path = obj.path ? obj.path : -1;
     return Object.assign(Object.assign({}, obj), { path });
 };
 exports.isPath = isPath;
+const isAlpaNum = str => str.match(/^[0-9]+[a-z]$/);
+const isNum = str => str.match(/^[0-9]+$/);
 const isDuration = (obj) => {
     let duration = obj.duration ? obj.duration : -1;
     return Object.assign(Object.assign({}, obj), { duration });

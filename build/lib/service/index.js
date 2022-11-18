@@ -23,35 +23,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.service = exports.cap = exports.getPayload = exports.getArguments = void 0;
+exports.cap = exports.afterArguments = exports.withArguments = void 0;
 const FU = __importStar(require("../f-utils"));
 const Valid = __importStar(require("../validation"));
 const Print = require("one-line-print");
-function getArguments(opt) {
+function withArguments(opt) {
     return FU.Maybe["of"](opt)
         .map(Valid.isPath)
         .map(Valid.isDuration)
         .join();
 }
-exports.getArguments = getArguments;
-function getPayload(obj) {
+exports.withArguments = withArguments;
+function afterArguments(obj) {
     return FU.Maybe["of"](obj)
         .map(Valid.pathResolver)
         .map(Valid.afterPathResolver)
         .map(Valid.addOsPlatform)
         .join();
 }
-exports.getPayload = getPayload;
+exports.afterArguments = afterArguments;
 const cap = (obj) => {
-    return FU.pipe(obj, getArguments, getPayload);
+    return FU.pipe(obj, withArguments, afterArguments);
 };
 exports.cap = cap;
-const service = (payload) => {
-    return new Promise((resolve, reject) => {
-        payload ? resolve(payload) : reject(payload["ERRORS"]);
-    });
-};
-exports.service = service;
 // action run
 // const run: IRunable = (file: string, time_s: number) => {
 //   return new Promise((resolve, reject) => {

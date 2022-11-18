@@ -1,4 +1,4 @@
-import {service,getArguments,getPayload,cap} from './lib/service';
+import {cap} from './lib/service';
 import * as Counter from './lib/counter';
 import * as Cons  from './lib/constants';
 
@@ -9,6 +9,7 @@ const keypress = require("keypress");
 
 const os = require("os");
 
+const file = "./lib/sound/win32-beep.psl"
 
 const program = new Command();
 // basic plain
@@ -25,6 +26,9 @@ const options = program.opts()
 
 const result = cap(options)
 console.log(result)
+
+
+
 
 
 

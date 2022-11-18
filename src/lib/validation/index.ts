@@ -1,6 +1,5 @@
 import { payload } from './../f-queue/index';
 import { errors } from "../constants";
-import * as FU from "../f-utils";
 
 import * as Cons from "../constants";
 
@@ -8,9 +7,9 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 
-export const IsPath = (obj) => {
-  let file = path.resolve(obj.path);
-};
+// export const IsPath = (obj) => {
+//   let file = path.resolve(obj.path);
+// };
 
 interface IValidator {
   (obj: any): object;
@@ -21,6 +20,9 @@ export const isPath: IValidator = (obj) => {
   let path = obj.path ? obj.path : -1;
   return { ...obj, path };
 };
+
+const isAlpaNum = str => str.match(/^[0-9]+[a-z]$/);
+const isNum = str => str.match(/^[0-9]+$/);
 
 export const isDuration: IValidator = (obj) => {
   let duration = obj.duration ? obj.duration : -1;
@@ -41,6 +43,9 @@ export const afterPathResolver = (obj) => {
   }
   return { ...obj };
 };
+
+
+
 
 // Os Check
 const getPlatform:Function = () => {

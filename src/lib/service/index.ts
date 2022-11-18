@@ -8,14 +8,14 @@ import * as Counter from "../counter";
 
 const Print = require("one-line-print");
 
-export function getArguments(opt) {
+export function withArguments(opt) {
   return FU.Maybe["of"](opt)
     .map(Valid.isPath)
     .map(Valid.isDuration)
     .join();
 }
 
-export function getPayload(obj){
+export function afterArguments(obj){
     return FU.Maybe["of"](obj)
       .map(Valid.pathResolver)
       .map(Valid.afterPathResolver)
@@ -27,21 +27,13 @@ export function getPayload(obj){
 export const cap = (obj:object) => {
     return FU.pipe(
         obj,
-        getArguments,
-        getPayload
+        withArguments,
+        afterArguments
     )
 }
 
 
-export const service = (payload: object) => {
-  return new Promise((resolve, reject) => {
-    payload ? resolve(payload) : reject(payload["ERRORS"])
-  })};
 
-    
-interface IRunable {
-  (file: string, time: number): PromiseLike<any>;
-}
 
 // action run
 // const run: IRunable = (file: string, time_s: number) => {

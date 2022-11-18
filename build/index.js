@@ -30,6 +30,7 @@ const { Command } = require("commander");
 const Print = require("one-line-print");
 const keypress = require("keypress");
 const os = require("os");
+const file = "./lib/sound/win32-beep.psl";
 const program = new Command();
 // basic plain
 program
