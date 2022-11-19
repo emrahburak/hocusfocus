@@ -1,45 +1,31 @@
-import {cap} from './lib/service';
+import * as Service from './lib/service';
 import * as Counter from './lib/counter';
 import * as Cons  from './lib/constants';
 
 const {Command} = require("commander");
 const Print = require("one-line-print");
+const sound = require("sound-play");
 const keypress = require("keypress");
-
-
 const os = require("os");
 
-const file = "./lib/sound/win32-beep.psl"
 
 const program = new Command();
 // basic plain
 program
   .version("1.0.0", "-v, --version")
   .usage("[OPTIONS]...")
-  .option("-d, --duration <value>", "set time interval",Cons.testState.DURATION)
-  .option("-p, --path <value>", "Overwriting value.",Cons.testState.PATH)
+  .option("-d, --duration <value>", "set time interval",Cons.initialState.DURATION)
+  .option("-p, --path <value>", "Overwriting value.",Cons.initialState.PATH)
 
 program.parse(process.argv);
 
 const options = program.opts()
 
 
-const result = cap(options)
-console.log(result)
-
-
-
-
-
-
-
-
-
-;
 
 //runtime
 keypress(process.stdin);
-// process.stdin.setRawMode(true);
+process.stdin.setRawMode(true);
 
 var spaceCliked = Counter.isPaused
 process.stdin.on("keypress", function (ch, key) {
@@ -50,18 +36,17 @@ process.stdin.on("keypress", function (ch, key) {
     }
     if (key.name === "space") {
       spaceCliked = !spaceCliked;
-      Counter.isPaused && console.log("\t ---paused---\n");
+      spaceCliked && console.log("\t ---paused---\n");
     }
   }
 });
 
-console.log(os.platform());
 
-// run(absoloutePath, duration)
-//   .then((res) => sound.play(res))
-//   .then(() => Print.newLine("Done"))
-//   .then(null,err => console.log(err.message))
+Service.run(options)
+  .then((res) => sound.play(res))
+  .then(() => Print.newLine("Done"))
+.catch((err) => console.log(err.message));
 
-// .catch((err) => console.log(err.message));
+// console.log("DEVELOPMENT");
 
-console.log("DEVELOPMENT");
+// console.log(os.platform());

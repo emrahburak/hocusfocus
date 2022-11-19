@@ -1,5 +1,3 @@
-import { payload } from './../f-queue/index';
-import { errors } from "../constants";
 
 import * as Cons from "../constants";
 
@@ -39,7 +37,7 @@ export const afterPathResolver = (obj) => {
   try {
     let error = fs.statSync(obj["path"]).isFile() ? Cons.errors.OPENFILE : -1;
   } catch (e) {
-    return { ...obj, ERRORS: [e.message] };
+    return { ...obj, errors: [e.message] };
   }
   return { ...obj };
 };

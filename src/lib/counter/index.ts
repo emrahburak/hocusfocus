@@ -25,7 +25,7 @@ interface ICounter {
 }
 
 // counter and timer
-export const counter: ICounter = function (n_duration: number, callback: Function) {
+export const countDown: ICounter = function (n_duration: number, callback: Function) {
   let countdownTimer: any = setInterval(() => {
     if (!isPaused) {
       let getTime = iteration(toTime, n_duration);

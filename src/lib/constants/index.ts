@@ -1,6 +1,6 @@
 export const initialState = {
-  DURATION: "",
-  PATH: "",
+  DURATION: 1500,
+  PATH: "./audio/audio.mp3",
 };
 
 export const testState = {

@@ -52,7 +52,7 @@ const afterPathResolver = (obj) => {
         let error = fs.statSync(obj["path"]).isFile() ? Cons.errors.OPENFILE : -1;
     }
     catch (e) {
-        return Object.assign(Object.assign({}, obj), { ERRORS: [e.message] });
+        return Object.assign(Object.assign({}, obj), { errors: [e.message] });
     }
     return Object.assign({}, obj);
 };

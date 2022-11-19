@@ -36,24 +36,23 @@ export const cap = (obj:object) => {
 
 
 // action run
-// const run: IRunable = (file: string, time_s: number) => {
-//   return new Promise((resolve, reject) => {
-//     // check path & file
-//     let myFile: string = path.resolve(file);
-//     var stats: boolean = fs.statSync(myFile).isFile();
+export const run = (obj) => {
+  return new Promise((resolve, reject) => {
+    // check path & file
+    let result = cap(obj)
 
-//     if (stats) {
-//       Print.newLine("Pomodoro");
+    if (!result["errors"]) {
+      Print.newLine("Pomodoro");
 
-//       //before countdown result payload
-//       // load(testCallback, "testCallback");
-//       FQ.payload(resolve, myFile);
+      //before countdown result payload
+      // load(testCallback, "testCallback");
+      FQ.loadQueue(resolve, result["path"]);
 
-//       // start countdown
-//       Counter.counter(time_s, FQ.dump);
-//     } else {
-//       let result = new Error("Cant open file. Path is not corret");
-//       reject(result);
-//     }
-//   });
-// }
+      // start countdown
+      Counter.countDown(result["duration"], FQ.dumpQueue);
+    } else {
+      let error = new Error(result["errors"][0]);
+      reject(result);
+    }
+  });
+}

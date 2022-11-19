@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.soundMetaData = exports.errors = exports.testState = exports.initialState = void 0;
 exports.initialState = {
-    DURATION: "",
-    PATH: "",
+    DURATION: 1500,
+    PATH: "./audio/audio.mp3",
 };
 exports.testState = {
     DURATION: 1500,

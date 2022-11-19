@@ -23,9 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cap = exports.afterArguments = exports.withArguments = void 0;
+exports.run = exports.cap = exports.afterArguments = exports.withArguments = void 0;
 const FU = __importStar(require("../f-utils"));
+const FQ = __importStar(require("../f-queue"));
 const Valid = __importStar(require("../validation"));
+const Counter = __importStar(require("../counter"));
 const Print = require("one-line-print");
 function withArguments(opt) {
     return FU.Maybe["of"](opt)
@@ -47,21 +49,22 @@ const cap = (obj) => {
 };
 exports.cap = cap;
 // action run
-// const run: IRunable = (file: string, time_s: number) => {
-//   return new Promise((resolve, reject) => {
-//     // check path & file
-//     let myFile: string = path.resolve(file);
-//     var stats: boolean = fs.statSync(myFile).isFile();
-//     if (stats) {
-//       Print.newLine("Pomodoro");
-//       //before countdown result payload
-//       // load(testCallback, "testCallback");
-//       FQ.payload(resolve, myFile);
-//       // start countdown
-//       Counter.counter(time_s, FQ.dump);
-//     } else {
-//       let result = new Error("Cant open file. Path is not corret");
-//       reject(result);
-//     }
-//   });
-// }
+const run = (obj) => {
+    return new Promise((resolve, reject) => {
+        // check path & file
+        let result = (0, exports.cap)(obj);
+        if (!result["errors"]) {
+            Print.newLine("Pomodoro");
+            //before countdown result payload
+            // load(testCallback, "testCallback");
+            FQ.loadQueue(resolve, result["path"]);
+            // start countdown
+            Counter.countDown(result["duration"], FQ.dumpQueue);
+        }
+        else {
+            let error = new Error(result["errors"][0]);
+            reject(result);
+        }
+    });
+};
+exports.run = run;
