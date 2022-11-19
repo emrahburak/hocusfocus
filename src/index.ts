@@ -6,6 +6,7 @@ const {Command} = require("commander");
 const Print = require("one-line-print");
 const sound = require("sound-play");
 const keypress = require("keypress");
+const  ntsuspend = require("ntsuspend");
 const os = require("os");
 
 
@@ -36,11 +37,11 @@ process.stdin.on("keypress", function (ch, key) {
     }
     if (key.name === "space") {
       spaceCliked = !spaceCliked;
-      spaceCliked && console.log("\t ---paused---\n");
+      console.log(Counter.isPaused);
+      Counter.isPaused && console.log("\t ---paused---\n")
     }
   }
 });
-
 
 Service.run(options)
   .then((res) => sound.play(res))
