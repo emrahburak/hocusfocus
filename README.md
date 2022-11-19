@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # hocusfocus:1.2.0
 
 ## ToDo
@@ -10,4 +11,8 @@
 - []  if not enter the path value play default system beep voice
 - [x]  create lib folder
 
+=======
+# hocusfocus
+
+>>>>>>> master
 
