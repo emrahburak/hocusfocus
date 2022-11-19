@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Maybe = exports.pipe = void 0;
-const R = require('ramda');
-const compose = R.compose;
-const path = R.path;
-const prop = R.prop;
 const pipe = (x0, ...fns) => fns.reduce((x, f) => f(x), x0);
 exports.pipe = pipe;
 const Maybe = function (val) {

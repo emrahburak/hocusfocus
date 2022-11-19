@@ -23,17 +23,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.run = exports.cap = exports.afterArguments = exports.withArguments = void 0;
+exports.run = exports.compose = exports.afterArguments = exports.withArguments = void 0;
 const FU = __importStar(require("../f-utils"));
+const Cons = __importStar(require("../constants"));
+const Event = __importStar(require("../event"));
 const FQ = __importStar(require("../f-queue"));
 const Valid = __importStar(require("../validation"));
 const Counter = __importStar(require("../counter"));
 const Print = require("one-line-print");
 function withArguments(opt) {
-    return FU.Maybe["of"](opt)
-        .map(Valid.isPath)
-        .map(Valid.isDuration)
-        .join();
+    return FU.Maybe["of"](opt).map(Valid.isPath).map(Valid.isDuration).join();
 }
 exports.withArguments = withArguments;
 function afterArguments(obj) {
@@ -44,22 +43,29 @@ function afterArguments(obj) {
         .join();
 }
 exports.afterArguments = afterArguments;
-const cap = (obj) => {
+const compose = (obj) => {
     return FU.pipe(obj, withArguments, afterArguments);
 };
-exports.cap = cap;
+exports.compose = compose;
 // action run
 const run = (obj) => {
     return new Promise((resolve, reject) => {
         // check path & file
-        let result = (0, exports.cap)(obj);
+        let status = false;
+        function isPause() {
+            return status = !status;
+        }
+        let result = (0, exports.compose)(obj);
         if (!result["errors"]) {
             Print.newLine("Pomodoro");
             //before countdown result payload
             // load(testCallback, "testCallback");
             FQ.loadQueue(resolve, result["path"]);
-            // start countdown
-            Counter.countDown(result["duration"], FQ.dumpQueue);
+            Event.consumer(Cons.commands.EMIT_COUNTER, isPause);
+            if (!status) {
+                // start countdown
+                Counter.countDown(result["duration"], FQ.dumpQueue);
+            }
         }
         else {
             let error = new Error(result["errors"][0]);
