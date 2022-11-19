@@ -1,4 +1,5 @@
 import * as Service from './lib/service';
+import * as Counter from './lib/counter'
 import * as Event from './lib/event'
 import * as Cons  from './lib/constants';
 
@@ -34,6 +35,8 @@ Service.run(options)
 keypress(process.stdin);
 process.stdin.setRawMode(true);
 
+
+let isPaused = false;
 process.stdin.on("keypress", function (ch, key) {
   if (key) {
     if (key.ctrl && key.name === "c") {
@@ -41,7 +44,9 @@ process.stdin.on("keypress", function (ch, key) {
       process.exit();
     }
     if (key.name === "space") {
+      isPaused = !isPaused
       Event.publisher(Cons.commands.EMIT_COUNTER);
+      isPaused && console.log("\t--paused--\n");
     }
   }
 });
