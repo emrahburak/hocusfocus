@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.soundMetaData = exports.errors = exports.testState = exports.initialState = void 0;
+exports.commands = exports.soundMetaData = exports.errors = exports.testState = exports.initialState = void 0;
 exports.initialState = {
     DURATION: 1500,
     PATH: "./audio/audio.mp3",
@@ -18,4 +18,7 @@ exports.soundMetaData = {
     DARVIN: "",
     LINUX: "",
     UNIX: ""
+};
+exports.commands = {
+    EMIT_COUNTER: "EMIT_COUNTER"
 };

@@ -1,14 +1,3 @@
-import { trace } from './../trace/index';
-
-import * as Valid from '../validation';
-const R = require('ramda');
-
-const compose = R.compose;
-const path = R.path;
-const prop = R.prop;
-
-
-
 
 interface Reducer {
   (obj:object,...fns:Function[]):object

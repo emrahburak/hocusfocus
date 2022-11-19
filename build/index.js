@@ -24,13 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Service = __importStar(require("./lib/service"));
-const Counter = __importStar(require("./lib/counter"));
+const Event = __importStar(require("./lib/event"));
 const Cons = __importStar(require("./lib/constants"));
 const { Command } = require("commander");
 const Print = require("one-line-print");
 const sound = require("sound-play");
 const keypress = require("keypress");
-const ntsuspend = require("ntsuspend");
+const events = require("events");
 const os = require("os");
 const program = new Command();
 // basic plain
@@ -41,10 +41,13 @@ program
     .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
 program.parse(process.argv);
 const options = program.opts();
+Service.run(options)
+    .then((res) => sound.play(res))
+    .then(() => Print.newLine("Done"))
+    .catch((err) => console.log(err.message));
 //runtime
 keypress(process.stdin);
 process.stdin.setRawMode(true);
-var spaceCliked = Counter.isPaused;
 process.stdin.on("keypress", function (ch, key) {
     if (key) {
         if (key.ctrl && key.name === "c") {
@@ -52,15 +55,9 @@ process.stdin.on("keypress", function (ch, key) {
             process.exit();
         }
         if (key.name === "space") {
-            spaceCliked = !spaceCliked;
-            console.log(Counter.isPaused);
-            Counter.isPaused && console.log("\t ---paused---\n");
+            Event.publisher(Cons.commands.EMIT_COUNTER);
         }
     }
 });
-Service.run(options)
-    .then((res) => sound.play(res))
-    .then(() => Print.newLine("Done"))
-    .catch((err) => console.log(err.message));
 // console.log("DEVELOPMENT");
 // console.log(os.platform());

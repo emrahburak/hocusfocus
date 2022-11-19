@@ -19,3 +19,7 @@ export const soundMetaData = {
   LINUX: "",
   UNIX:""
 }
+
+export const commands = {
+  EMIT_COUNTER:"EMIT_COUNTER"
+}

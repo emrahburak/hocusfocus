@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.countDown = exports.isPaused = exports.iteration = exports.toTime = void 0;
+exports.countDown = exports.iteration = exports.toTime = void 0;
 const Print = require("one-line-print");
 // convert seconds to time format
 const toTime = function* (secs) {
@@ -12,17 +12,13 @@ const iteration = (iteretor, val) => {
     return iteretor(val).next().value;
 };
 exports.iteration = iteration;
-exports.isPaused = false;
-// counter and timer
 const countDown = function (n_duration, callback) {
     let countdownTimer = setInterval(() => {
-        if (!exports.isPaused) {
-            let getTime = (0, exports.iteration)(exports.toTime, n_duration);
-            Print.line(`${getTime}`);
-            n_duration--;
-            if (n_duration < 0) {
-                return [clearInterval(countdownTimer), callback()];
-            }
+        let getTime = (0, exports.iteration)(exports.toTime, n_duration);
+        Print.line(`${getTime}`);
+        n_duration--;
+        if (n_duration < 0) {
+            return [clearInterval(countdownTimer), callback()];
         }
     }, 1000);
 };
