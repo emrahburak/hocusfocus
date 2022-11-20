@@ -8,6 +8,9 @@
 - [x]  pause when press the space bar && printing.
 - [x]  os check.
 - [ ]  if not enter the path value play default system beep voice.
+- [ ]  win32 beep voice
+- [ ]  darwin beep voice
+- [ ]  linux beep voice
 - [x]  create lib folder.
 - [ ]  print figlet on start up.
 
