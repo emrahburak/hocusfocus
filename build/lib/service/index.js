@@ -25,8 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = exports.compose = exports.afterArguments = exports.withArguments = void 0;
 const FU = __importStar(require("../f-utils"));
-const Cons = __importStar(require("../constants"));
-const Event = __importStar(require("../event"));
 const FQ = __importStar(require("../f-queue"));
 const Valid = __importStar(require("../validation"));
 const Counter = __importStar(require("../counter"));
@@ -39,7 +37,7 @@ function afterArguments(obj) {
     return FU.Maybe["of"](obj)
         .map(Valid.pathResolver)
         .map(Valid.afterPathResolver)
-        .map(Valid.addOsPlatform)
+        .map(Valid.orDefaultPath)
         .join();
 }
 exports.afterArguments = afterArguments;
@@ -49,28 +47,14 @@ const compose = (obj) => {
 exports.compose = compose;
 // action run
 const run = (obj) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         // check path & file
-        let status = false;
-        function isPause() {
-            return status = !status;
-        }
         let result = (0, exports.compose)(obj);
-        if (!result["errors"]) {
-            Print.newLine("Pomodoro");
-            //before countdown result payload
-            // load(testCallback, "testCallback");
-            FQ.loadQueue(resolve, result["path"]);
-            Event.consumer(Cons.commands.EMIT_COUNTER, isPause);
-            if (!status) {
-                // start countdown
-                Counter.countDown(result["duration"], FQ.dumpQueue);
-            }
-        }
-        else {
-            let error = new Error(result["errors"][0]);
-            reject(result);
-        }
+        Print.newLine("Pomodoro");
+        //   // before countdown result payload
+        FQ.loadQueue(resolve, result["path"]);
+        //   // start countdown
+        Counter.countDown(result["duration"], FQ.dumpQueue);
     });
 };
 exports.run = run;
