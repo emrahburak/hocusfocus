@@ -145,4 +145,13 @@ dist
 
 # TS -incremental file
 tsconfig.tsbuildinfo
+
+# node folders
 node_modules
+
+
+# VsCode
+
+.vscode
+
+
