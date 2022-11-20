@@ -1,4 +1,6 @@
-# hocusfocus:1.3.0
+# hocusfocus:1.4.0
+
+npm install -g hocusfocus
 
 ## ToDo
 
@@ -6,12 +8,10 @@
 - [ ]  duration check with regex.
 - [ ]  convert hour to seconds (1h => 3600s).
 - [x]  pause when press the space bar && printing.
-- [x]  os check.
-- [ ]  if not enter the path value play default system beep voice.
-- [ ]  win32 beep voice
-- [ ]  darwin beep voice
-- [ ]  linux beep voice
+- [x]  if not enter the path value play default system beep voice.
 - [x]  create lib folder.
 - [ ]  print figlet on start up.
+- [ ]  log line (warning,info)
+- [ ]  test script
 
 

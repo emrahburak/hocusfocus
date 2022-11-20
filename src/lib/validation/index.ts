@@ -5,9 +5,6 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 
-// export const IsPath = (obj) => {
-//   let file = path.resolve(obj.path);
-// };
 
 interface IValidator {
   (obj: any): object;
@@ -42,14 +39,19 @@ export const afterPathResolver = (obj) => {
   return { ...obj };
 };
 
+export const orDefaultPath = (obj) => {
+  if(!obj["errors"]) return {...obj};
+  return pathResolver({...obj,path:Cons.initialState.PATH});
+}
+
 
 
 
 // Os Check
-const getPlatform:Function = () => {
-  return os.platform() ? os.platform() : -1;
-}
+// const getPlatform:Function = () => {
+//   return os.platform() ? os.platform() : -1;
+// }
 
-export const addOsPlatform: Function = (obj) => {
-  return {...obj,platform:getPlatform()}
-};
+// export const addOsPlatform: Function = (obj) => {
+//   return {...obj,platform:getPlatform()}
+// };

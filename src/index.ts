@@ -28,7 +28,8 @@ const options = program.opts()
 Service.run(options)
   .then((res) => sound.play(res))
   .then(() => Print.newLine("Done"))
-.catch((err) => console.log(err.message));
+  .then(() => process.exit())
+  // .catch((err) => console.log(err.message));
 
 
 //runtime
@@ -46,7 +47,7 @@ process.stdin.on("keypress", function (ch, key) {
     if (key.name === "space") {
       isPaused = !isPaused
       Event.publisher(Cons.commands.EMIT_COUNTER);
-      isPaused && console.log("\t--paused--\n");
+      isPaused && Print.newLine("\t--paused--");
     }
   }
 });

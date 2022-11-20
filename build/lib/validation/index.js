@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addOsPlatform = exports.afterPathResolver = exports.pathResolver = exports.isDuration = exports.isPath = void 0;
+exports.orDefaultPath = exports.afterPathResolver = exports.pathResolver = exports.isDuration = exports.isPath = void 0;
 const Cons = __importStar(require("../constants"));
 const path = require("path");
 const os = require("os");
@@ -57,11 +57,16 @@ const afterPathResolver = (obj) => {
     return Object.assign({}, obj);
 };
 exports.afterPathResolver = afterPathResolver;
+const orDefaultPath = (obj) => {
+    if (!obj["errors"])
+        return Object.assign({}, obj);
+    return (0, exports.pathResolver)(Object.assign(Object.assign({}, obj), { path: Cons.initialState.PATH }));
+};
+exports.orDefaultPath = orDefaultPath;
 // Os Check
-const getPlatform = () => {
-    return os.platform() ? os.platform() : -1;
-};
-const addOsPlatform = (obj) => {
-    return Object.assign(Object.assign({}, obj), { platform: getPlatform() });
-};
-exports.addOsPlatform = addOsPlatform;
+// const getPlatform:Function = () => {
+//   return os.platform() ? os.platform() : -1;
+// }
+// export const addOsPlatform: Function = (obj) => {
+//   return {...obj,platform:getPlatform()}
+// };
