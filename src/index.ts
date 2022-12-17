@@ -1,41 +1,42 @@
-import * as Service from './lib/service';
-import * as Counter from './lib/counter'
-import * as Event from './lib/event'
-import * as Cons  from './lib/constants';
+import * as Service from "./lib/service";
+import * as Event from "./lib/event";
+import * as Cons from "./lib/constants";
 
-const {Command} = require("commander");
+const { Command } = require("commander");
 const Print = require("one-line-print");
 const sound = require("sound-play");
 const keypress = require("keypress");
-const events = require("events");
 
-
-const os = require("os");
-
+//Dev Mode
+process.env.NODE_ENV = "production";
+const isDev = process.env.NODE_ENV !== "production";
 
 const program = new Command();
 // basic plain
 program
   .version("1.0.0", "-v, --version")
   .usage("[OPTIONS]...")
-  .option("-d, --duration <value>", "set time interval",Cons.initialState.DURATION)
-  .option("-p, --path <value>", "Overwriting value.",Cons.initialState.PATH)
+  .option(
+    "-d, --duration <value>",
+    "set time interval",
+    Cons.initialState.DURATION
+  )
+  .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
 
 program.parse(process.argv);
 
-const options = program.opts()
+const options = program.opts();
 
 Service.run(options)
   .then((res) => sound.play(res))
   .then(() => Print.newLine("Done"))
-  .then(() => process.exit())
-  // .catch((err) => console.log(err.message));
-
+  .then(() => process.exit());
+// .catch((err) => console.log(err.message));
 
 //runtime
 keypress(process.stdin);
-process.stdin.setRawMode(true);
 
+!isDev ? process.stdin.setRawMode(true) : console.log(process.env.NODE_ENV);
 
 let isPaused = false;
 process.stdin.on("keypress", function (ch, key) {
@@ -45,14 +46,9 @@ process.stdin.on("keypress", function (ch, key) {
       process.exit();
     }
     if (key.name === "space") {
-      isPaused = !isPaused
+      isPaused = !isPaused;
       Event.publisher(Cons.commands.EMIT_COUNTER);
       isPaused && Print.newLine("\t--paused--");
     }
   }
 });
-
-
-// console.log("DEVELOPMENT");
-
-// console.log(os.platform());
