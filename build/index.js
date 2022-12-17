@@ -31,14 +31,14 @@ const Print = require("one-line-print");
 const sound = require("sound-play");
 const keypress = require("keypress");
 //Dev Mode
-process.env.NODE_ENV = "production";
-const isDev = process.env.NODE_ENV !== "production";
+process.env.NODE_ENV = Cons.mode.PROD;
+const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
 const program = new Command();
 // basic plain
 program
     .version("1.0.0", "-v, --version")
     .usage("[OPTIONS]...")
-    .option("-d, --duration <value>", "set time interval", Cons.initialState.DURATION)
+    .option("-d, --duration <value>", "set time interval", Cons.testState.DURATION)
     .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
 program.parse(process.argv);
 const options = program.opts();
