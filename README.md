@@ -8,7 +8,7 @@ node ./index.js --duration 15m
 or
 node ./index.js -d 2h4m
 or
-node ./index.js -p C:\\Users\\%USERNAME%\\Music\\%your-music-file%
+node ./index.js -p %your-music-file-path%
 ```
 
 
