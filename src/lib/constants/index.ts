@@ -4,7 +4,7 @@ export const initialState = {
 };
 
 export const testState = {
-  DURATION: "1h55m",
+  DURATION: "20m",
   PATH: "",
   ERRORS: null
 };

@@ -19,7 +19,7 @@ export const isPath: IValidator = (obj) => {
 const isAlpaNum = (str) =>
   str.match(/^[0-9]+[hm]$|^[0-9]+[h][0-9]+[m]$/) && true;
 
-// const isNum = (str) => str.match(/^[0-9]+$/) && true;
+const isNum = (str) => str.match(/^[0-9]+$/) && true;
 
 // Converters
 const convertMinuteToSecond = (val) => {
@@ -30,16 +30,15 @@ const convertHourToSecond = (val) => {
   return parseInt(val) * 3600;
 };
 
-
 const splitter = (val) => {
-  let duration = 0;
+  let [duration, hour, minute] = [0, 0, 0];
   //split before 'h'
-  let hour =
-    [...val].includes("h") ?
-    convertHourToSecond(val.slice(0, [...val].indexOf("h"))):0
+  hour = [...val].includes("h")
+    ? convertHourToSecond(val.slice(0, [...val].indexOf("h")))
+    : 0;
 
-    //split before 'm'
-  let minute =
+  //split before 'm'
+  minute =
     [...val].includes("m") &&
     (hour
       ? convertMinuteToSecond(
@@ -47,10 +46,9 @@ const splitter = (val) => {
         )
       : convertMinuteToSecond(val.slice(0, [...val].indexOf("m"))));
 
-  duration += hour + minute
+  duration +=  (hour || minute) && hour + minute;
   return duration;
 };
-
 
 // Parameters control
 export const isDuration: IValidator = (obj) => {
@@ -58,10 +56,10 @@ export const isDuration: IValidator = (obj) => {
   return { ...obj, duration };
 };
 
-export const durationParserMinute = (obj) => {
+export const durationParser = (obj) => {
   let duration = isAlpaNum(obj.duration)
     ? FU.pipe(obj.duration, splitter)
-    : obj.duration;
+    : isNum(obj.duration) ? obj.duration : 1500;
   return { ...obj, duration };
 };
 
@@ -84,12 +82,3 @@ export const orDefaultPath = (obj) => {
   if (!obj["errors"]) return { ...obj };
   return pathResolver({ ...obj, path: Cons.initialState.PATH });
 };
-
-// Os Check
-// const getPlatform:Function = () => {
-//   return os.platform() ? os.platform() : -1;
-// }
-
-// export const addOsPlatform: Function = (obj) => {
-//   return {...obj,platform:getPlatform()}
-// };

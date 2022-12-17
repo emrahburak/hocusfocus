@@ -6,7 +6,7 @@ exports.initialState = {
     PATH: "./audio/beep.wav",
 };
 exports.testState = {
-    DURATION: "1h55m",
+    DURATION: "20m",
     PATH: "",
     ERRORS: null
 };

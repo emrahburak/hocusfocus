@@ -19,7 +19,8 @@ program
   .option(
     "-d, --duration <value>",
     "set time interval",
-    Cons.testState.DURATION
+    !isDev ?  Cons.initialState.DURATION 
+    : Cons.testState.DURATION
   )
   .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
 

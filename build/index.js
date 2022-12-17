@@ -38,7 +38,8 @@ const program = new Command();
 program
     .version("1.0.0", "-v, --version")
     .usage("[OPTIONS]...")
-    .option("-d, --duration <value>", "set time interval", Cons.testState.DURATION)
+    .option("-d, --duration <value>", "set time interval", !isDev ? Cons.initialState.DURATION
+    : Cons.testState.DURATION)
     .option("-p, --path <value>", "Overwriting value.", Cons.initialState.PATH);
 program.parse(process.argv);
 const options = program.opts();

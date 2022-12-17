@@ -35,7 +35,7 @@ function withArguments(opt) {
 exports.withArguments = withArguments;
 function afterArguments(obj) {
     return FU.Maybe["of"](obj)
-        .map(Valid.durationParserMinute)
+        .map(Valid.durationParser)
         .map(Valid.pathResolver)
         .map(Valid.afterPathResolver)
         .map(Valid.orDefaultPath)

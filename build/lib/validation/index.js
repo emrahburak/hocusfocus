@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orDefaultPath = exports.afterPathResolver = exports.pathResolver = exports.durationParserMinute = exports.isDuration = exports.isPath = void 0;
+exports.orDefaultPath = exports.afterPathResolver = exports.pathResolver = exports.durationParser = exports.isDuration = exports.isPath = void 0;
 const Cons = __importStar(require("../constants"));
 const FU = __importStar(require("../f-utils"));
 const path = require("path");
@@ -37,7 +37,7 @@ const isPath = (obj) => {
 exports.isPath = isPath;
 // Regex
 const isAlpaNum = (str) => str.match(/^[0-9]+[hm]$|^[0-9]+[h][0-9]+[m]$/) && true;
-// const isNum = (str) => str.match(/^[0-9]+$/) && true;
+const isNum = (str) => str.match(/^[0-9]+$/) && true;
 // Converters
 const convertMinuteToSecond = (val) => {
     return parseInt(val) * 60;
@@ -46,16 +46,18 @@ const convertHourToSecond = (val) => {
     return parseInt(val) * 3600;
 };
 const splitter = (val) => {
-    let duration = 0;
+    let [duration, hour, minute] = [0, 0, 0];
     //split before 'h'
-    let hour = [...val].includes("h") ?
-        convertHourToSecond(val.slice(0, [...val].indexOf("h"))) : 0;
+    hour = [...val].includes("h")
+        ? convertHourToSecond(val.slice(0, [...val].indexOf("h")))
+        : 0;
     //split before 'm'
-    let minute = [...val].includes("m") &&
-        (hour
-            ? convertMinuteToSecond(val.slice([...val].indexOf("h") + 1, [...val].indexOf("m")))
-            : convertMinuteToSecond(val.slice(0, [...val].indexOf("m"))));
-    duration += hour + minute;
+    minute =
+        [...val].includes("m") &&
+            (hour
+                ? convertMinuteToSecond(val.slice([...val].indexOf("h") + 1, [...val].indexOf("m")))
+                : convertMinuteToSecond(val.slice(0, [...val].indexOf("m"))));
+    duration += (hour || minute) && hour + minute;
     return duration;
 };
 // Parameters control
@@ -64,13 +66,13 @@ const isDuration = (obj) => {
     return Object.assign(Object.assign({}, obj), { duration });
 };
 exports.isDuration = isDuration;
-const durationParserMinute = (obj) => {
+const durationParser = (obj) => {
     let duration = isAlpaNum(obj.duration)
         ? FU.pipe(obj.duration, splitter)
-        : obj.duration;
+        : isNum(obj.duration) ? obj.duration : 1500;
     return Object.assign(Object.assign({}, obj), { duration });
 };
-exports.durationParserMinute = durationParserMinute;
+exports.durationParser = durationParser;
 // File path Check
 const pathResolver = (obj) => {
     let result = path.resolve(String(obj["path"]));
@@ -93,10 +95,3 @@ const orDefaultPath = (obj) => {
     return (0, exports.pathResolver)(Object.assign(Object.assign({}, obj), { path: Cons.initialState.PATH }));
 };
 exports.orDefaultPath = orDefaultPath;
-// Os Check
-// const getPlatform:Function = () => {
-//   return os.platform() ? os.platform() : -1;
-// }
-// export const addOsPlatform: Function = (obj) => {
-//   return {...obj,platform:getPlatform()}
-// };
