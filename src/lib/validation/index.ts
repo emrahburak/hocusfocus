@@ -1,10 +1,9 @@
-
 import * as Cons from "../constants";
+import * as FU from '../f-utils'
 
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-
 
 interface IValidator {
   (obj: any): object;
@@ -16,13 +15,33 @@ export const isPath: IValidator = (obj) => {
   return { ...obj, path };
 };
 
-const isAlpaNum = str => str.match(/^[0-9]+[a-z]$/);
-const isNum = str => str.match(/^[0-9]+$/);
+// Regex
+const isAlpaNum = (str) => str.match(/^[0-9]+[a-z]$/) && true;
+const isNum = (str) => str.match(/^[0-9]+$/) && true;
 
+// Converters
+const convertMinuteToSecond = (val) => {
+  return parseInt(val) * 60
+};
+
+const splitterM = val => {
+  return val.split("m")[0]
+}
+
+
+// Parameters control
 export const isDuration: IValidator = (obj) => {
-  let duration = obj.duration ? obj.duration : -1;
+  let duration = obj.duration ? String(obj.duration) : -1;
   return { ...obj, duration };
 };
+
+export const durationParserMinute = (obj) => {
+  let duration = isAlpaNum(obj.duration)
+    ? FU.pipe(obj.duration,splitterM,convertMinuteToSecond)
+    : obj.duration;
+  return { ...obj, duration };
+};
+
 
 // File path Check
 export const pathResolver = (obj) => {
@@ -40,12 +59,9 @@ export const afterPathResolver = (obj) => {
 };
 
 export const orDefaultPath = (obj) => {
-  if(!obj["errors"]) return {...obj};
-  return pathResolver({...obj,path:Cons.initialState.PATH});
-}
-
-
-
+  if (!obj["errors"]) return { ...obj };
+  return pathResolver({ ...obj, path: Cons.initialState.PATH });
+};
 
 // Os Check
 // const getPlatform:Function = () => {

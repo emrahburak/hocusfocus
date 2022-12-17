@@ -30,8 +30,9 @@ const { Command } = require("commander");
 const Print = require("one-line-print");
 const sound = require("sound-play");
 const keypress = require("keypress");
-const events = require("events");
-const os = require("os");
+//Dev Mode
+process.env.NODE_ENV = "production";
+const isDev = process.env.NODE_ENV !== "production";
 const program = new Command();
 // basic plain
 program
@@ -48,7 +49,7 @@ Service.run(options)
 // .catch((err) => console.log(err.message));
 //runtime
 keypress(process.stdin);
-process.stdin.setRawMode(true);
+!isDev ? process.stdin.setRawMode(true) : console.log(process.env.NODE_ENV);
 let isPaused = false;
 process.stdin.on("keypress", function (ch, key) {
     if (key) {
@@ -63,5 +64,3 @@ process.stdin.on("keypress", function (ch, key) {
         }
     }
 });
-// console.log("DEVELOPMENT");
-// console.log(os.platform());

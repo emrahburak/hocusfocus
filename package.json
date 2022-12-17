@@ -6,7 +6,8 @@
   "scripts": {
     "start:build": "tsc -w",
     "start:run": "nodemon ./index.js",
-    "start": "concurrently npm:start:*"
+    "start": "concurrently npm:start:*",
+    "export":"tsc"
   },
   "keywords": [],
   "author": "",

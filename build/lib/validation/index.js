@@ -23,8 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orDefaultPath = exports.afterPathResolver = exports.pathResolver = exports.isDuration = exports.isPath = void 0;
+exports.orDefaultPath = exports.afterPathResolver = exports.pathResolver = exports.durationParserMinute = exports.isDuration = exports.isPath = void 0;
 const Cons = __importStar(require("../constants"));
+const FU = __importStar(require("../f-utils"));
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -34,13 +35,29 @@ const isPath = (obj) => {
     return Object.assign(Object.assign({}, obj), { path });
 };
 exports.isPath = isPath;
-const isAlpaNum = str => str.match(/^[0-9]+[a-z]$/);
-const isNum = str => str.match(/^[0-9]+$/);
+// Regex
+const isAlpaNum = (str) => str.match(/^[0-9]+[a-z]$/) && true;
+const isNum = (str) => str.match(/^[0-9]+$/) && true;
+// Converters
+const convertMinuteToSecond = (val) => {
+    return parseInt(val) * 60;
+};
+const splitterM = val => {
+    return val.split("m")[0];
+};
+// Parameters control
 const isDuration = (obj) => {
-    let duration = obj.duration ? obj.duration : -1;
+    let duration = obj.duration ? String(obj.duration) : -1;
     return Object.assign(Object.assign({}, obj), { duration });
 };
 exports.isDuration = isDuration;
+const durationParserMinute = (obj) => {
+    let duration = isAlpaNum(obj.duration)
+        ? FU.pipe(obj.duration, splitterM, convertMinuteToSecond)
+        : obj.duration;
+    return Object.assign(Object.assign({}, obj), { duration });
+};
+exports.durationParserMinute = durationParserMinute;
 // File path Check
 const pathResolver = (obj) => {
     let result = path.resolve(String(obj["path"]));
