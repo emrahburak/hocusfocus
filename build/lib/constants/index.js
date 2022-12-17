@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commands = exports.errors = exports.testState = exports.initialState = void 0;
+exports.mode = exports.commands = exports.errors = exports.testState = exports.initialState = void 0;
 exports.initialState = {
     DURATION: 1500,
     PATH: "./audio/beep.wav",
 };
 exports.testState = {
-    DURATION: "15m",
+    DURATION: "1h55m",
     PATH: "",
     ERRORS: null
 };
@@ -21,4 +21,8 @@ exports.errors = {
 // }
 exports.commands = {
     EMIT_COUNTER: "EMIT_COUNTER"
+};
+exports.mode = {
+    PROD: "production",
+    DEV: "development"
 };

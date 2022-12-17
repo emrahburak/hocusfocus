@@ -1,5 +1,5 @@
 import * as Cons from "../constants";
-import * as FU from '../f-utils'
+import * as FU from "../f-utils";
 
 const path = require("path");
 const os = require("os");
@@ -16,17 +16,40 @@ export const isPath: IValidator = (obj) => {
 };
 
 // Regex
-const isAlpaNum = (str) => str.match(/^[0-9]+[a-z]$/) && true;
-const isNum = (str) => str.match(/^[0-9]+$/) && true;
+const isAlpaNum = (str) =>
+  str.match(/^[0-9]+[hm]$|^[0-9]+[h][0-9]+[m]$/) && true;
+
+// const isNum = (str) => str.match(/^[0-9]+$/) && true;
 
 // Converters
 const convertMinuteToSecond = (val) => {
-  return parseInt(val) * 60
+  return parseInt(val) * 60;
 };
 
-const splitterM = val => {
-  return val.split("m")[0]
-}
+const convertHourToSecond = (val) => {
+  return parseInt(val) * 3600;
+};
+
+
+const splitter = (val) => {
+  let duration = 0;
+  //split before 'h'
+  let hour =
+    [...val].includes("h") ?
+    convertHourToSecond(val.slice(0, [...val].indexOf("h"))):0
+
+    //split before 'm'
+  let minute =
+    [...val].includes("m") &&
+    (hour
+      ? convertMinuteToSecond(
+          val.slice([...val].indexOf("h") + 1, [...val].indexOf("m"))
+        )
+      : convertMinuteToSecond(val.slice(0, [...val].indexOf("m"))));
+
+  duration += hour + minute
+  return duration;
+};
 
 
 // Parameters control
@@ -37,11 +60,10 @@ export const isDuration: IValidator = (obj) => {
 
 export const durationParserMinute = (obj) => {
   let duration = isAlpaNum(obj.duration)
-    ? FU.pipe(obj.duration,splitterM,convertMinuteToSecond)
+    ? FU.pipe(obj.duration, splitter)
     : obj.duration;
   return { ...obj, duration };
 };
-
 
 // File path Check
 export const pathResolver = (obj) => {

@@ -4,7 +4,7 @@ export const initialState = {
 };
 
 export const testState = {
-  DURATION: "15m",
+  DURATION: "1h55m",
   PATH: "",
   ERRORS: null
 };
@@ -22,4 +22,9 @@ export const errors = {
 
 export const commands = {
   EMIT_COUNTER:"EMIT_COUNTER"
+}
+
+export const mode = {
+  PROD : "production",
+  DEV : "development"
 }
