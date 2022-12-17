@@ -1,4 +1,16 @@
 # hocusfocus:1.6.0
+```bash
+node ./index.js
+or
+node ./index.js -d 1500
+or
+node ./index.js --duration 15m
+or
+node ./index.js -d 2h4m
+or
+node ./index.js -p C:\\Users\\%USERNAME%\\Music\\%your-music-file%
+```
+
 
 
 ## ToDo
