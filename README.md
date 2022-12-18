@@ -1,14 +1,21 @@
 # hocusfocus:1.6.0
+
+
 ```bash
-node ./index.js
+npm i -g emrahburak/hocusfocus
+
+```
+
+```bash
+hocusfocus
 or
-node ./index.js -d 1500
+hocusfocus -d 1500
 or
-node ./index.js --duration 15m
+hocusfocus --duration 15m
 or
-node ./index.js -d 2h4m
+hocusfocus -d 2h4m
 or
-node ./index.js -p %your-music-file-path%
+hocusfocus -p %your-music-file-path-for-alternatives-beep-sound%
 ```
 
 

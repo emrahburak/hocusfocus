@@ -7,13 +7,13 @@
     "start:build": "tsc -w",
     "start:run": "nodemon ./index.js",
     "start": "concurrently npm:start:*",
-    "export":"tsc"
+    "export": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bin": {
-    "execute": "index.js"
+    "hocusfocus": "index.js"
   },
   "dependencies": {
     "commander": "^7.2.0",
