@@ -3,7 +3,12 @@
 
 ```bash
 npm i -g emrahburak/hocusfocus
-
+or
+git clone https://github.com/emrahburak/hocusfocus.git
+cd /hocusfocus
+npm link
+or 
+npm i -g .
 ```
 
 ```bash
