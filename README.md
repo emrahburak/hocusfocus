@@ -1,4 +1,4 @@
-# hocusfocus:1.6.0
+# hocusfocus:1.7.0
 
 
 ```bash
@@ -14,20 +14,18 @@ npm i -g .
 ```bash
 hocusfocus
 or
-hocusfocus -d 1500
+hocusfocus -t 1500
 or
-hocusfocus --duration 15m
+hocusfocus --time 15m
 or
-hocusfocus -d 2h4m
-or
-hocusfocus -p %your-music-file-path-for-alternatives-beep-sound%
+hocusfocus -t 2h10m -p %your-music-file-path-for-alternatives-beep-sound%
 ```
 
 
 
 ## ToDo
 
-- [ ] flag of --help restore.
+- [x] flag of --help restore.
 - [x]  duration check 'minutes' with regex.
 - [x]  duration check 'hours' with regex.
 - []  duration check 'seconds' with regex.
