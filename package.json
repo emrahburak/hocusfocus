@@ -1,5 +1,5 @@
 {
-	"name": "hocus",
+	"name": "hocusfocus",
 	"description": "CLI Based Pomodoro Timer",
 	"version": "1.7.0",
 	"license": "MIT",
@@ -12,13 +12,14 @@
 		"url": "www.github.com/emrahburak"
 	},
 	"keywords": [
-		"hocus",
+		"hocusfocus",
 		"emrahburak"
 	],
 	"files": [
 		"index.js",
 		"utils",
-		"lib"
+		"lib",
+		"audio"
 	],
 	"scripts": {
 		"format": "prettier --write \"./**/*.{js,json}\"",
