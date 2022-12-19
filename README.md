@@ -1,0 +1,40 @@
+# hocusfocus:1.7.0
+
+
+```bash
+npm i -g emrahburak/hocusfocus
+or
+git clone https://github.com/emrahburak/hocusfocus.git
+cd /hocusfocus
+npm link
+or 
+npm i -g .
+```
+
+```bash
+hocusfocus
+or
+hocusfocus -t 1500
+or
+hocusfocus --time 15m
+or
+hocusfocus -t 2h10m -p %your-music-file-path-for-alternatives-beep-sound%
+```
+
+
+
+## ToDo
+
+- [x] flag of --help restore.
+- [x]  duration check 'minutes' with regex.
+- [x]  duration check 'hours' with regex.
+- []  duration check 'seconds' with regex.
+- [x]  convert hour to seconds (1h => 3600s).
+- [x]  pause when press the space bar && printing.
+- [x]  if not enter the path value play default system beep voice.
+- [x]  create lib folder.
+- [ ]  print figlet on start up.
+- [ ]  log line (warning,info)
+- [ ]  test script
+
+

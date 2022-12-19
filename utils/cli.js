@@ -1,5 +1,8 @@
 const meow = require('meow');
 const meowHelp = require('cli-meow-help');
+const Cons = require('../lib/constants');
+
+const path = require('path');
 
 const flags = {
 	clear: {
@@ -25,10 +28,16 @@ const flags = {
 		desc: `Print CLI version`
 	},
 	time: {
-		type:`string`,
-		default:`5`,
-		alias:`t`,
-		desc: `Set the time you need`
+		type: `string`,
+		default: Cons.initialState.DURATION,
+		alias: `t`,
+		desc: `Set the time you need. [h|hm|m]`
+	},
+	path: {
+		type: `string`,
+		default: Cons.initialState.PATH,
+		alias: `p`,
+		desc: `Custom file path to beep sound`
 	}
 };
 
