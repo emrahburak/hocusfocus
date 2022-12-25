@@ -38,11 +38,22 @@ const flags = {
 		default: Cons.initialState.PATH,
 		alias: `p`,
 		desc: `Custom file path to beep sound`
+	},
+	repaat: {
+		type: `string`,
+		default: `2`,
+		alias: `r`
+	},
+	block: {
+		type: `string`,
+		alias: `b`,
+		desc: `Set the block time you need. [t/break/repeat]`
 	}
 };
 
 const commands = {
-	help: { desc: `Print help info` }
+	help: { desc: `Print help info` },
+	set: { desc: `Add custom settings [block]` }
 };
 
 const helpText = meowHelp({

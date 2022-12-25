@@ -5,14 +5,15 @@
  * CLI Based Pomodoro Timer
  *
  * @author emrahburak <www.github.com/emrahburak>
- * 
- * 
+ *
+ *
  */
 
 const { soundPlayer } = require('./lib/player');
 const Service = require('./lib/service');
 const Cons = require('./lib/constants');
 const Event = require('./lib/event');
+const libCli = require('./lib/cli');
 
 const Print = require('one-line-print');
 const keypress = require('keypress');
@@ -29,19 +30,29 @@ const { clear, debug } = flags;
 process.env.NODE_ENV = Cons.mode.PROD;
 const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
 
+
+
+
 (async () => {
 	init({ clear });
 	input.includes(`help`) && cli.showHelp(0);
 
+	libCli.inputMaybe(input)
+
+
+
+
+
 	const options = {
-		duration: flags.time,
+		duration: !flags.block ? flags.time: flags.block,
 		path: flags.path
 	};
 
-	await Service.run(options)
+	await Service.runTimer(options)
 		.then(res => soundPlayer(res))
 		.then(() => Print.newLine('Done!'))
 		.then(() => process.exit());
+
 
 	debug && log(flags);
 })();
