@@ -40,7 +40,7 @@ const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
 
 	await Service.run(options)
 		.then(res => soundPlayer(res))
-		.then(() => Print.newLine('Done!'))
+		.then(() => Print.newLine('Done! 🧠'))
 		.then(() => process.exit());
 
 	debug && log(flags);
