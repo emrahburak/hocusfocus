@@ -9,7 +9,7 @@
 	"author": {
 		"name": "emrahburak",
 		"email": "gemrahburak@gmail.com",
-		"url": "www.github.com/emrahburak"
+		"url": "https://www.github.com/emrahburak"
 	},
 	"keywords": [
 		"hocusfocus",
@@ -35,6 +35,7 @@
 		"keypress": "^0.2.1",
 		"meow": "^9.0.0",
 		"one-line-print": "^1.0.0",
+		"shelljs": "^0.8.5",
 		"sound-play": "^1.1.0"
 	},
 	"devDependencies": {

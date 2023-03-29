@@ -5,8 +5,8 @@
  * CLI Based Pomodoro Timer
  *
  * @author emrahburak <www.github.com/emrahburak>
- * 
- * 
+ *
+ *
  */
 
 const { soundPlayer } = require('./lib/player');
@@ -25,9 +25,14 @@ const input = cli.input;
 const flags = cli.flags;
 const { clear, debug } = flags;
 
-//Dev Mode
+//We enable production or development mode in the code below.
 process.env.NODE_ENV = Cons.mode.PROD;
 const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
+
+// The service layer; validates the input,
+// counts down teh time entered by the user,
+// returns wtih sound ,
+// exits the script
 
 (async () => {
 	init({ clear });
@@ -40,13 +45,14 @@ const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
 
 	await Service.run(options)
 		.then(res => soundPlayer(res))
-		.then(() => Print.newLine('Done! 🧠'))
+		.then(() => Print.newLine(`Done, ${Cons.topic.DONE}`))
 		.then(() => process.exit());
 
 	debug && log(flags);
 })();
 
-//runtime
+//In the code below , we pause or quit the script according
+// to the keyboard inputs at runtime
 keypress(process.stdin);
 
 !isDev ? process.stdin.setRawMode(true) : console.log(process.env.NODE_ENV);
