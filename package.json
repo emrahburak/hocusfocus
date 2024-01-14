@@ -35,6 +35,7 @@
 		"keypress": "^0.2.1",
 		"meow": "^9.0.0",
 		"one-line-print": "^1.0.0",
+		"play-sound": "^1.1.6",
 		"shelljs": "^0.8.5",
 		"sound-play": "^1.1.0"
 	},
