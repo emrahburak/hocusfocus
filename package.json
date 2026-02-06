@@ -1,7 +1,7 @@
 {
 	"name": "hocusfocus",
 	"description": "CLI Based Pomodoro Timer",
-	"version": "1.7.0",
+	"version": "1.8.0",
 	"license": "MIT",
 	"bin": {
 		"hocusfocus": "index.js"
