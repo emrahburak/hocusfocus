@@ -1,4 +1,4 @@
-# hocusfocus:1.7.0
+# hocusfocus:1.8.0
 
 
 ```bash
@@ -36,6 +36,6 @@ hocusfocus -t 2h10m -p %your-music-file-path-for-alternatives-beep-sound%
 - [x]  print figlet on start up.
 - [x]  runable on win32,linux,macos
 - [ ]  log line (warning,info)
-- [ ]  test script
+- [x]  test script
 
 
