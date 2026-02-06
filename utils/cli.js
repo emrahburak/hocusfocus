@@ -29,15 +29,18 @@ const flags = {
 	},
 	time: {
 		type: `string`,
-		default: Cons.initialState.DURATION,
 		alias: `t`,
-		desc: `Set the time you need. [h|hm|m]`
+		desc: `Set the time. [1h30m, 25m, 1500] (Default: config value or 25m)`
 	},
 	path: {
 		type: `string`,
-		default: Cons.initialState.PATH,
 		alias: `p`,
-		desc: `Custom file path to beep sound`
+		desc: `Custom beep sound path. (Default: config value or beep.wav)`
+	},
+	config: {
+		type: `boolean`,
+		alias: `C`,
+		desc: `Open the configuration file directory`
 	}
 };
 

@@ -6,13 +6,13 @@
  *
  * @author emrahburak <www.github.com/emrahburak>
  *
- *
  */
 
 const { soundPlayer } = require('./lib/player');
 const Service = require('./lib/service');
 const Cons = require('./lib/constants');
 const Event = require('./lib/event');
+const Config = require('./lib/config');
 
 const Print = require('one-line-print');
 const keypress = require('keypress');
@@ -29,14 +29,14 @@ const { clear, debug } = flags;
 process.env.NODE_ENV = Cons.mode.PROD;
 const isDev = process.env.NODE_ENV !== Cons.mode.PROD;
 
-// The service layer; validates the input,
-// counts down teh time entered by the user,
-// returns wtih sound ,
-// exits the script
-
 (async () => {
 	init({ clear });
 	input.includes(`help`) && cli.showHelp(0);
+
+	if (flags.config) {
+		console.log(`\n Configuration file: ${Config.getConfigPath()}\n`);
+		process.exit(0);
+	}
 
 	const options = {
 		duration: flags.time,
