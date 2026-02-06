@@ -7,10 +7,10 @@ Bu belge, `hocusfocus` projesinin bir verimlilik ekosistemine dönüşmesi için
 *   **Özellik:** `hocusfocus "Refactoring" -t 25m` şeklinde görev isimlendirme.
 *   **Kalıcılık:** Görevlerin bir `history.json` dosyasına kaydedilmesi ve gün sonunda raporlanması.
 
-## 2. Yapılandırma Sistemi (Persistent Configuration)
-*   **Amaç:** Kullanıcı deneyimini hızlandırmak ve kişiselleştirmek.
-*   **Özellik:** `.hocusfocusrc` veya `config.json` desteği.
-*   **Kapsam:** Varsayılan süreler, mola süreleri ve özel ses dosyası yollarının saklanması.
+## ~~2. Yapılandırma Sistemi (Persistent Configuration)~~
+*   ~~**Amaç:** Kullanıcı deneyimini hızlandırmak ve kişiselleştirmek.~~
+*   ~~**Özellik:** `.hocusfocusrc` veya `config.json` desteği.~~
+*   ~~**Kapsam:** Varsayılan süreler, mola süreleri ve özel ses dosyası yollarının saklanması.~~
 
 ## 3. Otomatik Döngüler (Focus/Break Cycles)
 *   **Amaç:** Klasik Pomodoro döngüsünü (4 odak + 1 uzun mola) otomatize etmek.
